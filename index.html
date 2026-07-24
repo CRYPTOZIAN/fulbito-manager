@@ -1,1560 +1,1430 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fulbito Manager - Construí tu carrera</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #0a0a0a;
-            color: #ffffff;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* PANTALLA INICIAL */
-        .home-screen {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-            padding: 20px;
-        }
-
-        .home-content {
-            max-width: 800px;
-            text-align: center;
-        }
-
-        .home-image {
-            width: 100%;
-            max-width: 500px;
-            height: 300px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 20px;
-            margin: 0 auto 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 120px;
-            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
-        }
-
-        h1 {
-            font-size: 48px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #fff 0%, #888 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            font-size: 18px;
-            color: #888;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .btn {
-            padding: 18px 40px;
-            font-size: 18px;
-            font-weight: 600;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-primary {
-            background: #fff;
-            color: #0a0a0a;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #fff;
-            border: 2px solid #fff;
-        }
-
-        .btn-secondary:hover {
-            background: #fff;
-            color: #0a0a0a;
-        }
-
-        /* CREACIÓN DE JUGADOR */
-        .creation-screen {
-            min-height: 100vh;
-            padding: 40px 20px;
-            background: #0a0a0a;
-        }
-
-        .creation-title {
-            font-size: 32px;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .creation-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 30px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .creation-card {
-            background: #1a1a1a;
-            border-radius: 20px;
-            padding: 30px;
-            border: 2px solid #2a2a2a;
-        }
-
-        .creation-card h3 {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: #fff;
-        }
-
-        .jersey-preview {
-            width: 150px;
-            height: 180px;
-            background: #fff;
-            border-radius: 10px;
-            margin: 0 auto 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #0a0a0a;
-            font-weight: bold;
-        }
-
-        .jersey-number {
-            font-size: 48px;
-            font-weight: 900;
-        }
-
-        .jersey-name {
-            font-size: 14px;
-            text-transform: uppercase;
-            margin-top: 10px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .input-group input, .input-group select {
-            width: 100%;
-            padding: 12px;
-            background: #0a0a0a;
-            border: 2px solid #2a2a2a;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        .input-group input:focus, .input-group select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .btn-random {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .btn-random:hover {
-            transform: translateY(-2px);
-        }
-
-        /* PANTALLA DE JUEGO */
-        .game-screen {
-            min-height: 100vh;
-            padding: 20px;
-            background: #0a0a0a;
-        }
-
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #1a1a1a;
-            border-radius: 15px;
-        }
-
-        .player-card-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .ovr-badge {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            width: 80px;
-            height: 80px;
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-        }
-
-        .ovr-value {
-            font-size: 32px;
-            line-height: 1;
-        }
-
-        .ovr-label {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-
-        .player-info h2 {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        .player-meta {
-            color: #888;
-            font-size: 14px;
-        }
-
-        .stats-bar {
-            display: flex;
-            gap: 30px;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #888;
-            text-transform: uppercase;
-        }
-
-        .game-content {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 30px;
-        }
-
-        .main-content {
-            background: #1a1a1a;
-            border-radius: 20px;
-            padding: 30px;
-            min-height: 600px;
-        }
-
-        .age-display {
-            font-size: 48px;
-            font-weight: 900;
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .age-label {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 30px;
-        }
-
-        .event-card {
-            background: #0a0a0a;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            border: 2px solid #2a2a2a;
-        }
-
-        .event-title {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: #fff;
-        }
-
-        .event-description {
-            font-size: 16px;
-            color: #aaa;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
-        .decision-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .decision-btn {
-            background: #2a2a2a;
-            border: 2px solid #3a3a3a;
-            border-radius: 12px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: left;
-        }
-
-        .decision-btn:hover {
-            background: #3a3a3a;
-            border-color: #667eea;
-            transform: translateY(-2px);
-        }
-
-        .decision-btn h4 {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: #fff;
-        }
-
-        .decision-btn p {
-            font-size: 13px;
-            color: #888;
-        }
-
-        .decision-effects {
-            margin-top: 10px;
-            font-size: 12px;
-        }
-
-        .effect-positive {
-            color: #4ade80;
-        }
-
-        .effect-negative {
-            color: #f87171;
-        }
-
-        /* TIMELINE */
-        .timeline-panel {
-            background: #1a1a1a;
-            border-radius: 20px;
-            padding: 20px;
-            height: fit-content;
-        }
-
-        .timeline-title {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #fff;
-        }
-
-        .timeline-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .timeline-item {
-            background: #0a0a0a;
-            border-radius: 10px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border-left: 4px solid #667eea;
-        }
-
-        .timeline-age {
-            background: #667eea;
-            color: #fff;
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .timeline-content {
-            flex: 1;
-        }
-
-        .timeline-club {
-            font-weight: 600;
-            color: #fff;
-            font-size: 14px;
-        }
-
-        .timeline-stats {
-            font-size: 12px;
-            color: #888;
-            margin-top: 3px;
-        }
-
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: #1a1a1a;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-title {
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-
-        .modal-text {
-            font-size: 16px;
-            color: #aaa;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 968px) {
-            .creation-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .game-content {
-                grid-template-columns: 1fr;
-            }
-
-            .timeline-panel {
-                order: 2;
-            }
-
-            .stats-bar {
-                gap: 15px;
-            }
-
-            h1 {
-                font-size: 32px;
-            }
-
-            .decision-buttons {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ANIMACIONES */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease;
-        }
-
-        /* BADGES */
-        .badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin: 5px;
-        }
-
-        .badge-argentina { background: #75aadb; color: #fff; }
-        .badge-brazil { background: #009c3b; color: #fff; }
-        .badge-spain { background: #aa151b; color: #fff; }
-        .badge-england { background: #012169; color: #fff; }
-        .badge-italy { background: #0066cc; color: #fff; }
-        .badge-germany { background: #000000; color: #fff; border: 1px solid #fff; }
-        .badge-france { background: #002395; color: #fff; }
-
-        /* PROGRESS BARS */
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #0a0a0a;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 5px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            transition: width 0.3s;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Copero · Simulador de Carrera Futbolística</title>
+<!-- ============================================================
+     SIMULADOR DE CARRERA — PARTE 1 / 10
+     Shell + Design System + i18n + DATA maestra + Landing + Identidad
+     Las PARTES 2..10 se inyectan donde indica:  // === FIN PARTE 1 ===
+     ============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   DESIGN SYSTEM  (Parte 1)
+   ========================================================= */
+:root{
+  --bg:#0a0a0b; --bg-2:#0d0d10; --panel:#161618; --panel-2:#1b1b1f;
+  --panel-3:#222227; --border:#2a2a30; --border-2:#34343c;
+  --text:#f4f4f6; --muted:#9a9aa6; --muted-2:#6c6c78;
+  --accent:#e0489b; --accent-2:#c026d3; --indigo:#6366f1; --indigo-2:#818cf8;
+  --good:#4ade80; --bad:#f87171; --gold:#f59e0b; --gold-2:#fbbf24;
+  --field:#0f5132; --field-2:#14532d; --field-line:rgba(255,255,255,.22);
+  --r-sm:8px; --r-md:14px; --r-lg:20px; --r-xl:26px; --r-pill:999px;
+  --shadow:0 18px 50px -20px rgba(0,0,0,.8);
+  --grad-ovr:linear-gradient(150deg,#f472b6,#d946ef 55%,#a21caf);
+  --grad-accent:linear-gradient(135deg,#e0489b,#c026d3);
+  --font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--font); background:var(--bg); color:var(--text);
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  background-image:radial-gradient(1200px 600px at 80% -10%,rgba(192,38,211,.10),transparent 60%),
+                   radial-gradient(900px 500px at 0% 110%,rgba(99,102,241,.08),transparent 60%);
+}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input{font-family:inherit}
+a{color:inherit;text-decoration:none}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#2c2c34;border-radius:8px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:#3a3a44}
+
+.container{max-width:1280px;margin:0 auto;padding:0 28px}
+.muted{color:var(--muted)}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
+
+/* ---------- HEADER ---------- */
+.site-header{
+  position:sticky;top:0;z-index:50;background:rgba(10,10,11,.82);
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--border);
+}
+.site-header .row{display:flex;align-items:center;gap:34px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:22px;letter-spacing:-.02em}
+.brand svg{width:24px;height:24px;color:var(--text)}
+.main-nav{display:flex;gap:26px;margin-left:8px}
+.main-nav a{color:var(--muted);font-weight:600;font-size:15px;transition:color .2s}
+.main-nav a:hover,.main-nav a.active{color:var(--text)}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:18px}
+.link-login{color:var(--text);font-weight:700;font-size:14px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-weight:700;border-radius:var(--r-pill);transition:transform .15s,box-shadow .2s,background .2s,border-color .2s;
+  white-space:nowrap;
+}
+.btn:active{transform:translateY(1px)}
+.btn-white{background:#fff;color:#0a0a0b;padding:10px 20px;font-size:14px}
+.btn-white:hover{box-shadow:0 8px 24px -8px rgba(255,255,255,.5)}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border-2);padding:10px 20px;font-size:14px}
+.btn-ghost:hover{border-color:var(--muted);background:rgba(255,255,255,.04)}
+.btn-accent{background:var(--grad-accent);color:#fff;padding:12px 26px;font-size:15px;box-shadow:0 10px 30px -10px rgba(224,72,155,.7)}
+.btn-accent:hover{filter:brightness(1.08)}
+.btn-lg{padding:15px 34px;font-size:16px}
+
+/* ---------- SCREENS ---------- */
+.screen{display:none;animation:fadeUp .5s cubic-bezier(.2,.7,.2,1) both}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(224,72,155,.45)}50%{box-shadow:0 0 28px 4px rgba(224,72,155,.35)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+/* ---------- LANDING / HERO ---------- */
+.hero{display:grid;grid-template-columns:1fr 1.05fr;gap:64px;align-items:center;padding:70px 0 90px}
+.hero-art{
+  position:relative;aspect-ratio:1/.78;border-radius:var(--r-lg);overflow:hidden;
+  background:linear-gradient(150deg,#3a0d2e,#7a155f 45%,#c026d3 120%);
+  box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.08);
+}
+.hero-art::after{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 7px);mix-blend-mode:overlay}
+.hero-art .sil{position:absolute;bottom:0;background:rgba(255,255,255,.14);border-radius:40px 40px 10px 10px}
+.hero-art .sil::before{content:"";position:absolute;left:50%;top:-26px;transform:translateX(-50%);
+  width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.16)}
+.hero-art .sil.s1{left:8%;width:74px;height:150px;opacity:.5}
+.hero-art .sil.s2{left:38%;width:96px;height:200px;background:rgba(255,255,255,.22)}
+.hero-art .sil.s2::before{width:54px;height:54px;top:-32px;background:rgba(255,255,255,.24)}
+.hero-art .sil.s3{right:8%;width:80px;height:170px;opacity:.55}
+.hero-art .num{position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);
+  font-size:120px;font-weight:900;color:rgba(255,255,255,.16);letter-spacing:-.05em}
+.hero-art .cup{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);width:64px;color:#fff;opacity:.92;animation:floaty 4s ease-in-out infinite}
+.hero-copy h1{font-size:clamp(40px,5.4vw,68px);line-height:1.02;font-weight:900;letter-spacing:-.03em;margin:14px 0 18px}
+.hero-copy p{color:var(--muted);font-size:18px;line-height:1.6;max-width:520px;margin-bottom:34px}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap}
+.lang-switch{display:inline-flex;background:var(--panel);border:1px solid var(--border);border-radius:var(--r-pill);padding:4px;gap:2px}
+.lang-switch button{display:flex;align-items:center;gap:7px;padding:6px 12px;border-radius:var(--r-pill);font-weight:700;font-size:13px;color:var(--muted);transition:.2s}
+.lang-switch button .flag{width:18px;height:13px;border-radius:2px;object-fit:cover}
+.lang-switch button.on{background:#fff;color:#0a0a0b}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+
+/* ---------- IDENTITY ---------- */
+.page-title{font-size:30px;font-weight:900;letter-spacing:-.02em;padding:34px 0 6px}
+.id-grid{display:grid;grid-template-columns:300px 1fr 360px;gap:30px;padding:18px 0 60px;align-items:start}
+.id-col h3{text-align:center;font-size:18px;font-weight:800;margin-bottom:18px}
+.jersey-wrap{display:flex;flex-direction:column;align-items:center;gap:22px}
+.jersey{position:relative;width:170px;height:180px;color:#111;
+  background:linear-gradient(180deg,#fff,#e9e9ee);
+  clip-path:polygon(28% 0,72% 0,100% 18%,86% 30%,86% 100%,14% 100%,14% 30%,0 18%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 20px 40px -20px rgba(0,0,0,.7)}
+.jersey .jname{font-size:13px;font-weight:800;letter-spacing:.08em;color:#222;margin-bottom:2px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jersey .jnum{font-size:54px;font-weight:900;line-height:1;color:#111}
+.field-row{display:grid;grid-template-columns:1fr 90px;gap:12px;width:100%}
+.field-input{display:flex;flex-direction:column;gap:6px}
+.field-input label{font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--muted-2);text-align:center}
+.inp{background:var(--panel-2);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:12px 14px;color:var(--text);font-size:15px;font-weight:600;width:100%;transition:.2s;text-align:center}
+.inp::placeholder{color:var(--muted-2);font-weight:600}
+.inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,72,155,.18)}
+.foot-toggle{display:flex;flex-direction:column;gap:6px}
+.seg{display:flex;background:var(--panel-2);border:1px solid var(--border);border-radius:var(--r-sm);overflow:hidden}
+.seg button{flex:1;padding:11px 6px;font-weight:700;font-size:13px;color:var(--muted);transition:.2s}
+.seg button.on{background:#fff;color:#0a0a0b}
+.id-foot{display:flex;justify-content:space-between;align-items:center;margin-top:26px;gap:14px}
+
+/* country list */
+.search-box{position:relative;margin-bottom:14px}
+.search-box svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;color:var(--muted-2)}
+.search-box input{background:var(--panel-2);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:13px 14px 13px 40px;width:100%;color:var(--text);font-size:14px}
+.search-box input:focus{outline:none;border-color:var(--indigo)}
+.country-list{max-height:330px;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;padding-right:6px}
+.country{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:var(--r-sm);transition:.15s;cursor:pointer}
+.country:hover{background:var(--panel-2)}
+.country.sel{background:rgba(99,102,241,.16);box-shadow:inset 0 0 0 1px var(--indigo)}
+.country .flag{width:26px;height:18px;border-radius:3px;object-fit:cover;background:#222;flex:none}
+.flag-emoji{font-size:18px;line-height:1}
+.country span{font-size:14px;font-weight:600}
+
+/* pitch */
+.pitch{position:relative;aspect-ratio:3/4.1;border-radius:var(--r-md);overflow:hidden;
+  background:repeating-linear-gradient(0deg,var(--field) 0 26px,var(--field-2) 26px 52px);
+  border:2px solid var(--field-line)}
+.pitch::before{content:"";position:absolute;inset:8px;border:2px solid var(--field-line);border-radius:6px}
+.pitch .mid{position:absolute;left:8px;right:8px;top:50%;height:2px;background:var(--field-line)}
+.pitch .circle{position:absolute;left:50%;top:50%;width:74px;height:74px;transform:translate(-50%,-50%);border:2px solid var(--field-line);border-radius:50%}
+.pitch .box-t,.pitch .box-b{position:absolute;left:50%;transform:translateX(-50%);border:2px solid var(--field-line);width:46%;height:14%}
+.pitch .box-t{top:8px;border-top:none}.pitch .box-b{bottom:8px;border-bottom:none}
+.pos{position:absolute;transform:translate(-50%,-50%);
+  background:rgba(8,30,18,.85);border:1px solid rgba(255,255,255,.28);color:#eafff2;
+  font-size:11px;font-weight:800;letter-spacing:.03em;padding:7px 9px;border-radius:var(--r-pill);
+  transition:.15s;backdrop-filter:blur(2px)}
+.pos:hover{background:rgba(99,102,241,.55);border-color:#fff;transform:translate(-50%,-50%) scale(1.08)}
+.pos.sel{background:var(--grad-accent);border-color:#fff;box-shadow:0 0 0 4px rgba(224,72,155,.3);animation:pop .3s}
+
+/* ---------- PLACEHOLDER (módulos de partes futuras) ---------- */
+.ph{min-height:60vh;display:flex;align-items:center;justify-content:center;padding:60px 0}
+.ph-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:48px 56px;text-align:center;max-width:560px;box-shadow:var(--shadow)}
+.ph-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,.15);color:var(--indigo-2);
+  font-weight:800;font-size:12px;letter-spacing:.12em;padding:7px 14px;border-radius:var(--r-pill);margin-bottom:18px}
+.ph-card h2{font-size:26px;font-weight:900;letter-spacing:-.02em;margin-bottom:10px}
+.ph-card p{color:var(--muted);line-height:1.6}
+
+/* ---------- TOAST ---------- */
+#toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);
+  background:var(--panel-3);border:1px solid var(--border-2);color:var(--text);
+  padding:13px 22px;border-radius:var(--r-pill);font-weight:700;font-size:14px;
+  box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.3s;z-index:200}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-right:9px;vertical-align:middle}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr;gap:34px;padding:40px 0 60px}
+  .id-grid{grid-template-columns:1fr;gap:34px}
+  .main-nav{display:none}
+}
+</style>
 </head>
 <body>
-    <!-- PANTALLA INICIAL -->
-    <div id="homeScreen" class="home-screen">
-        <div class="home-content">
-            <div class="home-image"></div>
-            <h1>Fulbito Manager</h1>
-            <p class="subtitle">
-                Construí tu carrera futbolística<br>
-                Elegí tu origen, tomá decisiones clave y dejá que el destino<br>
-                te lleve a una trayectoria única de títulos, estadísticas y momentos decisivos.
-            </p>
-            <button class="btn btn-primary" onclick="showCreationScreen()">Comenzar carrera</button>
-            <button class="btn btn-secondary" onclick="loadGame()">Continuar carrera</button>
-        </div>
+
+<!-- HEADER (común a todas las pantallas) -->
+<header class="site-header">
+  <div class="container row">
+    <a class="brand" href="#" onclick="App.go('landing');return false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 0 12 0V3H6z"/><path d="M6 5H3v2a3 3 0 0 0 3 3M18 5h3v2a3 3 0 0 1-3 3M9 21h6M12 15v6"/></svg>
+      copero
+    </a>
+    <nav class="main-nav">
+      <a href="#" data-i18n="nav_worldcup">Mundial 2026</a>
+      <a href="#" data-i18n="nav_sports">Deportes</a>
+      <a href="#" class="active" data-i18n="nav_games">Juegos</a>
+      <a href="#" data-i18n="nav_prodes">Prodes</a>
+      <a href="#" data-i18n="nav_blog">Blog</a>
+    </nav>
+    <div class="header-right">
+      <a class="link-login" href="#" data-i18n="login">Ingresar</a>
+      <button class="btn btn-white" data-i18n="signup">Crear cuenta</button>
     </div>
+  </div>
+</header>
 
-    <!-- CREACIÓN DE JUGADOR -->
-    <div id="creationScreen" class="creation-screen hidden">
-        <h2 class="creation-title">Definí tu identidad</h2>
-        <div class="creation-grid">
-            <div class="creation-card">
-                <h3>Identidad</h3>
-                <div class="jersey-preview">
-                    <div class="jersey-number" id="previewNumber">10</div>
-                    <div class="jersey-name" id="previewName">APELLIDO</div>
-                </div>
-                <div class="input-group">
-                    <label>Apellido</label>
-                    <input type="text" id="inputApellido" placeholder="Tu apellido" value="Rodríguez" oninput="updatePreview()">
-                </div>
-                <div class="input-group">
-                    <label>Número</label>
-                    <input type="number" id="inputNumero" min="1" max="99" value="10" oninput="updatePreview()">
-                </div>
-                <div class="input-group">
-                    <label>Pierna hábil</label>
-                    <select id="inputPierna">
-                        <option value="Derecha">Derecha</option>
-                        <option value="Izquierda">Izquierda</option>
-                        <option value="Ambas">Ambas</option>
-                    </select>
-                </div>
-            </div>
+<main class="container">
+  <section id="screen-landing"  class="screen"></section>
+  <section id="screen-identity" class="screen"></section>
+  <section id="screen-career"   class="screen"></section>
+  <section id="screen-match"    class="screen"></section>
+  <section id="screen-offer"    class="screen"></section>
+  <section id="screen-press"    class="screen"></section>
+  <section id="screen-final"    class="screen"></section>
+</main>
 
-            <div class="creation-card">
-                <h3>Genética</h3>
-                <div class="input-group">
-                    <label>Altura (cm)</label>
-                    <select id="inputAltura">
-                        <option value="165">165 cm (Bajo)</option>
-                        <option value="170" selected>170 cm (Medio)</option>
-                        <option value="175">175 cm (Medio-Alto)</option>
-                        <option value="180">180 cm (Alto)</option>
-                        <option value="185">185 cm (Muy Alto)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Complexión</label>
-                    <select id="inputComplexion">
-                        <option value="Delgado">Delgado (+Velocidad, -Fuerza)</option>
-                        <option value="Atletico" selected>Atlético (Balance)</option>
-                        <option value="Robusto">Robusto (+Fuerza, -Velocidad)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Tipo físico</label>
-                    <select id="inputTipoFisico">
-                        <option value="Tanque">Tanque (Cata Díaz - Longevo)</option>
-                        <option value="Cristal">Cristal (Neymar - Lesionable)</option>
-                        <option value="Profesional">Profesional (CR7 - Constante)</option>
-                        <option value="Genio">Genio (Messi - Talento)</option>
-                        <option value="Guerrero">Guerrero (Tevez - Garra)</option>
-                    </select>
-                </div>
-            </div>
+<div id="toast"><span class="dot"></span><span id="toast-msg"></span></div>
 
-            <div class="creation-card">
-                <h3>Origen</h3>
-                <div class="input-group">
-                    <label>Nacionalidad</label>
-                    <select id="inputNacionalidad">
-                        <option value="Argentina">🇦 Argentina</option>
-                        <option value="Brasil">🇧🇷 Brasil</option>
-                        <option value="España">🇪🇸 España</option>
-                        <option value="Inglaterra">🏴󠁢󠁮󠁧 Inglaterra</option>
-                        <option value="Italia">🇮🇹 Italia</option>
-                        <option value="Alemania">🇩🇪 Alemania</option>
-                        <option value="Francia">🇫 Francia</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Clase social</label>
-                    <select id="inputClaseSocial">
-                        <option value="Villa">Villa de emergencia (+Hambre, -Recursos)</option>
-                        <option value="Obrero">Barrio obrero (Balance)</option>
-                        <option value="Media">Clase media (+Recursos)</option>
-                        <option value="Alta">Clase alta (+Contactos, -Hambre)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Posición</label>
-                    <select id="inputPosicion">
-                        <option value="Arquero">Arquero</option>
-                        <option value="Defensor">Defensor</option>
-                        <option value="Mediocampista">Mediocampista</option>
-                        <option value="Delantero" selected>Delantero</option>
-                    </select>
-                </div>
+<script>
+/* =========================================================
+   UTILIDADES GLOBALES  (Parte 1)
+   ========================================================= */
+const $  = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+const rand  = (a,b)=>Math.random()*(b-a)+a;
+const randInt=(a,b)=>Math.floor(rand(a,b+1));
+const pick  = arr=>arr[Math.floor(Math.random()*arr.length)];
+const chance= p=>Math.random()<p;
+const fmtMoney = m => m>=1e6 ? '€'+(m/1e6).toFixed(1)+'M' : m>=1e3 ? '€'+Math.round(m/1e3)+'K' : '€'+m;
+
+// ISO-2 -> emoji bandera (fallback offline)
+function codeToFlag(code){
+  return code.toUpperCase().replace(/./g,c=>String.fromCodePoint(127397+c.charCodeAt(0)));
+}
+// Fallback si flagcdn falla
+window.fixFlag = function(img,code){
+  const s=document.createElement('span');
+  s.className='flag flag-emoji'; s.textContent=codeToFlag(code);
+  img.replaceWith(s);
+};
+function flagImg(code,cls='flag'){
+  const c=code.toLowerCase();
+  return `<img class="${cls}" src="https://flagcdn.com/w40/${c}.png" alt="${code}" loading="lazy" onerror="fixFlag(this,'${code}')">`;
+}
+// Escudo SVG generado con los colores reales del club (offline, 0 assets)
+function makeCrest(tag,c1,c2){
+  return `<svg viewBox="0 0 80 92" width="46" height="53" aria-hidden="true">
+    <defs><clipPath id="sh${tag}"><path d="M4 4 H76 V46 Q76 76 40 90 Q4 76 4 46 Z"/></clipPath></defs>
+    <g clip-path="url(#sh${tag})">
+      <rect width="40" height="92" fill="${c1}"/><rect x="40" width="40" height="92" fill="${c2}"/>
+      <rect width="80" height="92" fill="url(#g${tag})" opacity=".18"/>
+    </g>
+    <path d="M4 4 H76 V46 Q76 76 40 90 Q4 76 4 46 Z" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="3"/>
+    <text x="40" y="52" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900"
+      font-size="22" fill="#fff" style="paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:2px">${tag}</text>
+  </svg>`;
+}
+
+/* =========================================================
+   i18n  (Parte 1 — cadenas de shell + identidad)
+   ========================================================= */
+const I18N = {
+  es:{ nav_worldcup:'Mundial 2026', nav_sports:'Deportes', nav_games:'Juegos', nav_prodes:'Prodes', nav_blog:'Blog',
+       login:'Ingresar', signup:'Crear cuenta', eyebrow:'Minijuegos Copero',
+       hero_title:'Construí tu carrera futbolística',
+       hero_text:'Elegí tu origen, tomá decisiones clave y dejá que el destino te lleve a una trayectoria única de títulos, estadísticas y momentos decisivos.',
+       start:'Comenzar carrera', back_games:'Volver a Juegos',
+       id_title:'Definí tu identidad', col_id:'Identidad', col_nat:'Nacionalidad', col_pos:'Posición',
+       surname:'Apellido', number:'Número', foot:'Pierna hábil', left:'Izquierda', right:'Derecha',
+       search_country:'Buscar país', back:'Volver', confirm:'Confirmar identidad',
+       need_identity:'Completá apellido, nacionalidad y posición para continuar.',
+       ph_soon:'Este módulo se construye en una parte siguiente.' },
+  en:{ nav_worldcup:'World Cup 2026', nav_sports:'Sports', nav_games:'Games', nav_prodes:'Prodes', nav_blog:'Blog',
+       login:'Log in', signup:'Sign up', eyebrow:'Copero Mini-games',
+       hero_title:'Build your football career',
+       hero_text:'Choose your origin, make key decisions and let destiny take you on a unique path of titles, stats and defining moments.',
+       start:'Start career', back_games:'Back to Games',
+       id_title:'Define your identity', col_id:'Identity', col_nat:'Nationality', col_pos:'Position',
+       surname:'Surname', number:'Number', foot:'Preferred foot', left:'Left', right:'Right',
+       search_country:'Search country', back:'Back', confirm:'Confirm identity',
+       need_identity:'Fill surname, nationality and position to continue.',
+       ph_soon:'This module is built in a later part.' },
+  pt:{ nav_worldcup:'Copa 2026', nav_sports:'Esportes', nav_games:'Jogos', nav_prodes:'Prodes', nav_blog:'Blog',
+       login:'Entrar', signup:'Criar conta', eyebrow:'Mini-jogos Copero',
+       hero_title:'Construa sua carreira no futebol',
+       hero_text:'Escolha sua origem, tome decisões-chave e deixe o destino levá-lo a uma trajetória única de títulos, estatísticas e momentos decisivos.',
+       start:'Iniciar carreira', back_games:'Voltar a Jogos',
+       id_title:'Defina sua identidade', col_id:'Identidade', col_nat:'Nacionalidade', col_pos:'Posição',
+       surname:'Sobrenome', number:'Número', foot:'Pé hábil', left:'Esquerdo', right:'Direito',
+       search_country:'Buscar país', back:'Voltar', confirm:'Confirmar identidade',
+       need_identity:'Preencha sobrenome, nacionalidade e posição para continuar.',
+       ph_soon:'Este módulo é construído em uma parte posterior.' }
+};
+const t = k => (I18N[App.state.lang]||I18N.es)[k] || (I18N.es)[k] || k;
+
+/* =========================================================
+   DATA MAESTRA  (Parte 1)
+   ========================================================= */
+const DATA = {
+  // ---- 80 países (code ISO2 + nombre ES). Banderas vía flagcdn con fallback emoji.
+  COUNTRIES: [
+    ['AF','Afganistán'],['AL','Albania'],['DE','Alemania'],['AD','Andorra'],['AO','Angola'],
+    ['AI','Anguila'],['SA','Arabia Saudita'],['DZ','Argelia'],['AR','Argentina'],['AM','Armenia'],
+    ['AU','Australia'],['AT','Austria'],['AZ','Azerbaiyán'],['BS','Bahamas'],['BD','Bangladés'],
+    ['BE','Bélgica'],['BJ','Benín'],['BY','Bielorrusia'],['BO','Bolivia'],['BA','Bosnia y Herzegovina'],
+    ['BW','Botsuana'],['BR','Brasil'],['BG','Bulgaria'],['BF','Burkina Faso'],['BI','Burundi'],
+    ['KH','Camboya'],['CM','Camerún'],['CA','Canadá'],['CV','Cabo Verde'],['TD','Chad'],
+    ['CL','Chile'],['CN','China'],['CY','Chipre'],['CO','Colombia'],['KR','Corea del Sur'],
+    ['CR','Costa Rica'],['CI','Costa de Marfil'],['HR','Croacia'],['CU','Cuba'],['DK','Dinamarca'],
+    ['EC','Ecuador'],['EG','Egipto'],['SV','El Salvador'],['AE','Emiratos Árabes'],['SK','Eslovaquia'],
+    ['SI','Eslovenia'],['ES','España'],['US','Estados Unidos'],['EE','Estonia'],['ET','Etiopía'],
+    ['FI','Finlandia'],['FR','Francia'],['GA','Gabón'],['GH','Ghana'],['GR','Grecia'],['GT','Guatemala'],
+    ['HN','Honduras'],['HU','Hungría'],['IN','India'],['ID','Indonesia'],['IR','Irán'],['IQ','Irak'],
+    ['IE','Irlanda'],['IS','Islandia'],['IL','Israel'],['IT','Italia'],['JM','Jamaica'],['JP','Japón'],
+    ['JO','Jordania'],['KZ','Kazajistán'],['KE','Kenia'],['LV','Letonia'],['LT','Lituania'],['LU','Luxemburgo'],
+    ['MA','Marruecos'],['MX','México'],['NG','Nigeria'],['NO','Noruega'],['NZ','Nueva Zelanda'],['PA','Panamá'],
+    ['PY','Paraguay'],['PE','Perú'],['PL','Polonia'],['PT','Portugal'],['QA','Catar'],['GB','Reino Unido'],
+    ['CZ','República Checa'],['RO','Rumania'],['RU','Rusia'],['SN','Senegal'],['RS','Serbia'],['ZA','Sudáfrica'],
+    ['SE','Suecia'],['CH','Suiza'],['TH','Tailandia'],['TN','Túnez'],['TR','Turquía'],['UA','Ucrania'],
+    ['UY','Uruguay'],['VE','Venezuela']
+  ].map(([code,name])=>({code,name})),
+
+  // ---- 12 posiciones (x,y en % sobre el campo vertical; POR abajo como en Copero)
+  POSITIONS: [
+    {id:'POR', label:'POR', x:50, y:91, zone:'GK'},
+    {id:'DFC', label:'DFC', x:50, y:78, zone:'DEF'},
+    {id:'LI',  label:'LI',  x:22, y:70, zone:'DEF'},
+    {id:'LD',  label:'LD',  x:78, y:70, zone:'DEF'},
+    {id:'MCD', label:'MCD', x:50, y:60, zone:'MED'},
+    {id:'MI',  label:'MI',  x:20, y:50, zone:'MED'},
+    {id:'MC',  label:'MC',  x:50, y:49, zone:'MED'},
+    {id:'MD',  label:'MD',  x:80, y:50, zone:'MED'},
+    {id:'MCO', label:'MCO', x:50, y:36, zone:'MED'},
+    {id:'EI',  label:'EI',  x:22, y:24, zone:'ATT'},
+    {id:'ED',  label:'ED',  x:78, y:24, zone:'ATT'},
+    {id:'DC',  label:'DC',  x:50, y:14, zone:'ATT'}
+  ],
+
+  // ---- 7 ligas / 70 clubes reales (tier, baseOVR del plantel, prestige 0-100, colores reales, tag del escudo)
+  LEAGUES: [
+    {id:'ARG', name:'Liga Profesional',      country:'AR'},
+    {id:'BRA', name:'Brasileirão Série A',   country:'BR'},
+    {id:'ESP', name:'La Liga',               country:'ES'},
+    {id:'ENG', name:'Premier League',        country:'GB'},
+    {id:'ITA', name:'Serie A',               country:'IT'},
+    {id:'GER', name:'Bundesliga',            country:'DE'},
+    {id:'FRA', name:'Ligue 1',               country:'FR'}
+  ],
+  CLUBS: [
+    // Argentina
+    {id:'river',  name:'River Plate',        tag:'RIV', league:'ARG', tier:1, ovr:78, prest:92, c1:'#e30613', c2:'#ffffff'},
+    {id:'boca',   name:'Boca Juniors',       tag:'BOC', league:'ARG', tier:1, ovr:77, prest:93, c1:'#002b5c', c2:'#f9b400'},
+    {id:'racing', name:'Racing Club',        tag:'RAC', league:'ARG', tier:1, ovr:76, prest:84, c1:'#6cb4e4', c2:'#ffffff'},
+    {id:'indep',  name:'Independiente',      tag:'IND', league:'ARG', tier:1, ovr:74, prest:82, c1:'#c8102e', c2:'#ffffff'},
+    {id:'casla',  name:'San Lorenzo',        tag:'CAS', league:'ARG', tier:1, ovr:73, prest:80, c1:'#0d2c54', c2:'#a50034'},
+    {id:'edlp',   name:'Estudiantes (LP)',   tag:'EDL', league:'ARG', tier:1, ovr:74, prest:78, c1:'#c8102e', c2:'#ffffff'},
+    {id:'gimn',   name:'Gimnasia (LP)',      tag:'GIM', league:'ARG', tier:1, ovr:70, prest:66, c1:'#0b3d91', c2:'#ffffff'},
+    {id:'lanus',  name:'Lanús',              tag:'LAN', league:'ARG', tier:1, ovr:73, prest:70, c1:'#7a1f2b', c2:'#1c1c1c'},
+    {id:'velez',  name:'Vélez Sarsfield',    tag:'VEL', league:'ARG', tier:1, ovr:74, prest:76, c1:'#003da5', c2:'#ffffff'},
+    {id:'aaaj',   name:'Argentinos Jrs.',    tag:'AAJ', league:'ARG', tier:1, ovr:72, prest:68, c1:'#d81e2c', c2:'#ffffff'},
+    {id:'hurac',  name:'Huracán',            tag:'HUR', league:'ARG', tier:1, ovr:71, prest:64, c1:'#ffffff', c2:'#d81e2c'},
+    {id:'rcen',   name:'Rosario Central',    tag:'RC',  league:'ARG', tier:1, ovr:72, prest:72, c1:'#003da5', c2:'#f9b400'},
+    {id:'tall',   name:'Talleres (C)',       tag:'TAL', league:'ARG', tier:1, ovr:73, prest:70, c1:'#1c3a8f', c2:'#ffffff'},
+    {id:'dyj',    name:'Defensa y Justicia', tag:'DYJ', league:'ARG', tier:1, ovr:72, prest:60, c1:'#9bce3f', c2:'#f7d117'},
+    {id:'tempe',  name:'Temperley',          tag:'TEM', league:'ARG', tier:2, ovr:64, prest:42, c1:'#6cb4e4', c2:'#ffffff'},
+    {id:'coleg',  name:'Colegiales',         tag:'COL', league:'ARG', tier:3, ovr:58, prest:24, c1:'#c8102e', c2:'#f9b400'},
+    // Brasil
+    {id:'fla',  name:'Flamengo',        tag:'FLA', league:'BRA', tier:1, ovr:80, prest:95, c1:'#d81e2c', c2:'#111111'},
+    {id:'pal',  name:'Palmeiras',       tag:'PAL', league:'BRA', tier:1, ovr:80, prest:92, c1:'#006437', c2:'#ffffff'},
+    {id:'sao',  name:'São Paulo',       tag:'SPF', league:'BRA', tier:1, ovr:78, prest:90, c1:'#d81e2c', c2:'#111111'},
+    {id:'cor',  name:'Corinthians',     tag:'COR', league:'BRA', tier:1, ovr:77, prest:89, c1:'#111111', c2:'#ffffff'},
+    {id:'san',  name:'Santos',          tag:'SAN', league:'BRA', tier:1, ovr:74, prest:84, c1:'#ffffff', c2:'#111111'},
+    {id:'flu',  name:'Fluminense',      tag:'FLU', league:'BRA', tier:1, ovr:77, prest:83, c1:'#7a1f2b', c2:'#006437'},
+    {id:'bot',  name:'Botafogo',        tag:'BOT', league:'BRA', tier:1, ovr:78, prest:82, c1:'#111111', c2:'#ffffff'},
+    {id:'gre',  name:'Grêmio',          tag:'GRE', league:'BRA', tier:1, ovr:76, prest:84, c1:'#0d6fb8', c2:'#111111'},
+    {id:'int',  name:'Internacional',   tag:'INT', league:'BRA', tier:1, ovr:76, prest:83, c1:'#d81e2c', c2:'#ffffff'},
+    {id:'atm',  name:'Atlético Mineiro',tag:'CAM', league:'BRA', tier:1, ovr:77, prest:82, c1:'#111111', c2:'#ffffff'},
+    {id:'cru',  name:'Cruzeiro',        tag:'CRU', league:'BRA', tier:1, ovr:75, prest:80, c1:'#003da5', c2:'#ffffff'},
+    {id:'remo', name:'Remo',            tag:'REM', league:'BRA', tier:2, ovr:63, prest:40, c1:'#1c3a8f', c2:'#ffffff'},
+    // España
+    {id:'rma', name:'Real Madrid',     tag:'RMA', league:'ESP', tier:1, ovr:88, prest:99, c1:'#ffffff', c2:'#febe10'},
+    {id:'bar', name:'Barcelona',       tag:'BAR', league:'ESP', tier:1, ovr:87, prest:98, c1:'#a50044', c2:'#004d98'},
+    {id:'atm2',name:'Atlético Madrid', tag:'ATM', league:'ESP', tier:1, ovr:83, prest:88, c1:'#cb3524', c2:'#ffffff'},
+    {id:'sev', name:'Sevilla',         tag:'SEV', league:'ESP', tier:1, ovr:78, prest:80, c1:'#d81e2c', c2:'#ffffff'},
+    {id:'rso', name:'Real Sociedad',   tag:'RSO', league:'ESP', tier:1, ovr:79, prest:76, c1:'#003da5', c2:'#ffffff'},
+    {id:'ath', name:'Athletic Club',   tag:'ATH', league:'ESP', tier:1, ovr:79, prest:78, c1:'#d81e2c', c2:'#ffffff'},
+    {id:'vil', name:'Villarreal',      tag:'VIL', league:'ESP', tier:1, ovr:79, prest:74, c1:'#ffe114', c2:'#003da5'},
+    {id:'val', name:'Valencia',        tag:'VAL', league:'ESP', tier:1, ovr:76, prest:76, c1:'#ffffff', c2:'#111111'},
+    {id:'bet', name:'Real Betis',      tag:'BET', league:'ESP', tier:1, ovr:77, prest:74, c1:'#00954c', c2:'#ffffff'},
+    {id:'gir', name:'Girona',          tag:'GIR', league:'ESP', tier:1, ovr:78, prest:62, c1:'#cd2534', c2:'#ffffff'},
+    // Inglaterra
+    {id:'mci', name:'Manchester City', tag:'MCI', league:'ENG', tier:1, ovr:88, prest:95, c1:'#6cabdd', c2:'#1c2c5b'},
+    {id:'ars', name:'Arsenal',         tag:'ARS', league:'ENG', tier:1, ovr:86, prest:93, c1:'#ef0107', c2:'#ffffff'},
+    {id:'liv', name:'Liverpool',       tag:'LIV', league:'ENG', tier:1, ovr:86, prest:94, c1:'#c8102e', c2:'#ffffff'},
+    {id:'mun', name:'Manchester Utd',  tag:'MUN', league:'ENG', tier:1, ovr:82, prest:95, c1:'#da291c', c2:'#ffe500'},
+    {id:'che', name:'Chelsea',         tag:'CHE', league:'ENG', tier:1, ovr:82, prest:90, c1:'#034694', c2:'#ffffff'},
+    {id:'tot', name:'Tottenham',       tag:'TOT', league:'ENG', tier:1, ovr:81, prest:84, c1:'#ffffff', c2:'#132257'},
+    {id:'new', name:'Newcastle',       tag:'NEW', league:'ENG', tier:1, ovr:81, prest:80, c1:'#111111', c2:'#ffffff'},
+    {id:'avl', name:'Aston Villa',     tag:'AVL', league:'ENG', tier:1, ovr:80, prest:78, c1:'#670e36', c2:'#95bfe5'},
+    {id:'bri', name:'Brighton',        tag:'BHA', league:'ENG', tier:1, ovr:78, prest:66, c1:'#0057b8', c2:'#ffffff'},
+    {id:'whu', name:'West Ham',        tag:'WHU', league:'ENG', tier:1, ovr:77, prest:72, c1:'#7a263a', c2:'#1bb1e7'},
+    // Italia
+    {id:'int2',name:'Inter',           tag:'INT', league:'ITA', tier:1, ovr:86, prest:93, c1:'#0068a8', c2:'#111111'},
+    {id:'mil', name:'Milan',           tag:'MIL', league:'ITA', tier:1, ovr:83, prest:93, c1:'#fb090b', c2:'#111111'},
+    {id:'juv', name:'Juventus',        tag:'JUV', league:'ITA', tier:1, ovr:82, prest:94, c1:'#111111', c2:'#ffffff'},
+    {id:'nap', name:'Napoli',          tag:'NAP', league:'ITA', tier:1, ovr:83, prest:85, c1:'#12a0d7', c2:'#ffffff'},
+    {id:'rom', name:'Roma',            tag:'ROM', league:'ITA', tier:1, ovr:80, prest:84, c1:'#8e1f2f', c2:'#f0bc42'},
+    {id:'laz', name:'Lazio',           tag:'LAZ', league:'ITA', tier:1, ovr:79, prest:78, c1:'#87d8f7', c2:'#ffffff'},
+    {id:'ata', name:'Atalanta',        tag:'ATA', league:'ITA', tier:1, ovr:81, prest:74, c1:'#1c1c1c', c2:'#1e63b8'},
+    {id:'fio', name:'Fiorentina',      tag:'FIO', league:'ITA', tier:1, ovr:78, prest:76, c1:'#5f2e91', c2:'#ffffff'},
+    // Alemania
+    {id:'bay', name:'Bayern Munich',   tag:'BAY', league:'GER', tier:1, ovr:87, prest:96, c1:'#dc052d', c2:'#ffffff'},
+    {id:'bvb', name:'Borussia Dortmund',tag:'BVB',league:'GER', tier:1, ovr:83, prest:90, c1:'#fde100', c2:'#111111'},
+    {id:'rbl', name:'RB Leipzig',      tag:'RBL', league:'GER', tier:1, ovr:82, prest:74, c1:'#dd0741', c2:'#ffffff'},
+    {id:'b04', name:'Bayer Leverkusen',tag:'B04', league:'GER', tier:1, ovr:84, prest:78, c1:'#e32221', c2:'#111111'},
+    {id:'sge', name:'Eintracht Frankfurt',tag:'SGE',league:'GER',tier:1,ovr:79, prest:74, c1:'#111111', c2:'#e1000f'},
+    {id:'wob', name:'Wolfsburg',       tag:'WOB', league:'GER', tier:1, ovr:76, prest:64, c1:'#65b32e', c2:'#ffffff'},
+    {id:'stu', name:'Stuttgart',       tag:'VFB', league:'GER', tier:1, ovr:79, prest:70, c1:'#e32219', c2:'#ffffff'},
+    {id:'bmg', name:'Mönchengladbach', tag:'BMG', league:'GER', tier:1, ovr:76, prest:70, c1:'#111111', c2:'#ffffff'},
+    // Francia
+    {id:'psg', name:'Paris SG',        tag:'PSG', league:'FRA', tier:1, ovr:86, prest:92, c1:'#004170', c2:'#da291c'},
+    {id:'om',  name:'Marseille',       tag:'OM',  league:'FRA', tier:1, ovr:79, prest:84, c1:'#13b5ea', c2:'#ffffff'},
+    {id:'ol',  name:'Lyon',            tag:'OL',  league:'FRA', tier:1, ovr:78, prest:82, c1:'#0e2348', c2:'#da291c'},
+    {id:'mon', name:'Monaco',          tag:'ASM', league:'FRA', tier:1, ovr:78, prest:76, c1:'#da291c', c2:'#ffffff'},
+    {id:'lil', name:'Lille',           tag:'LOS', league:'FRA', tier:1, ovr:77, prest:72, c1:'#da291c', c2:'#0e2348'},
+    {id:'nic', name:'Nice',            tag:'OGC', league:'FRA', tier:1, ovr:76, prest:66, c1:'#da291c', c2:'#111111'},
+    {id:'ren', name:'Rennes',          tag:'REN', league:'FRA', tier:1, ovr:76, prest:66, c1:'#da291c', c2:'#111111'},
+    {id:'len', name:'Lens',            tag:'RCL', league:'FRA', tier:1, ovr:77, prest:68, c1:'#da291c', c2:'#f9b400'}
+  ],
+
+  // ---- Rasgos psicológicos (5 barras). Efectos completos en Parte 3.
+  PSYCH: [
+    {id:'confidence', label:'Confianza',  desc:'Seguridad en tu juego. Alta = mejor rendimiento en momentos clave.'},
+    {id:'motivation', label:'Motivación', desc:'Ganas de entrenar y mejorar. Afecta la velocidad de progreso.'},
+    {id:'resilience', label:'Resiliencia',desc:'Resistencia a la presión y a las rachas malas.'},
+    {id:'happiness',  label:'Felicidad',  desc:'Bienestar personal. Baja = riesgo de conflictos y lesiones.'},
+    {id:'form',       label:'Forma',      desc:'Estado físico y ritmo competitivo del momento.'}
+  ],
+
+  // ---- Catálogo de tags narrativos (las decisiones de los eventos los usan; Parte 4)
+  TAGS: {
+    diversion:      {label:'Diversión',       type:'good'},
+    progreso_rapido:{label:'Progreso rápido', type:'good'},
+    progreso_lento: {label:'Progreso lento',  type:'bad'},
+    presion:        {label:'Presión',         type:'bad'},
+    disciplina:     {label:'Disciplina',      type:'good'},
+    dinero:         {label:'Dinero',          type:'good'},
+    fama:           {label:'Fama',            type:'good'},
+    familia:        {label:'Familia',         type:'good'},
+    libertad:       {label:'Libertad',        type:'good'},
+    riesgo_lesion:  {label:'Riesgo de lesión',type:'bad'},
+    roce:           {label:'Roce competitivo',type:'good'},
+    estres:         {label:'Estrés',          type:'bad'}
+  },
+
+  // ---- Constantes / fórmulas (lógica de cálculo en Parte 3)
+  CONFIG: {
+    AGE_START:8, AGE_RETIRE_MAX:41, YEAR_START:2025,
+    OVR_FLOOR:40, OVR_CAP:99, OVR_START_BASE:48,
+    VALUE_BASE:50000,            // € valor inicial aprox
+    PSYCH_DEFAULT:62,            // valor inicial de cada barra
+    GROWTH_PEAK_AGE:27,          // pico de progresión
+    DECLINE_START_AGE:32         // empieza el declive físico
+  }
+};
+
+// helpers sobre DATA
+const clubById  = id => DATA.CLUBS.find(c=>c.id===id);
+const clubsOf   = lg => DATA.CLUBS.filter(c=>c.league===lg);
+const countryBy = code => DATA.COUNTRIES.find(c=>c.code===code);
+
+/* =========================================================
+   STATE (esqueleto — cada parte lo amplía)
+   ========================================================= */
+const STATE = {
+  lang:'es',
+  screen:'landing',
+  identity:{ surname:'', number:10, foot:'right', nationality:null, position:null, search:'' },
+  player:null,     // -> Parte 2
+  career:{},       // -> Parte 9
+  // psych, economy, press, etc. se inyectan en sus partes
+};
+
+/* =========================================================
+   APP / NAVEGACIÓN / RENDER  (Parte 1)
+   ========================================================= */
+const App = {
+  state: STATE,
+
+  init(){
+    this.applyLang('es');
+    this.wireGlobal();
+    this.go('landing');
+  },
+
+  // ---- i18n: aplica idioma a todo [data-i18n] del shell
+  applyLang(code){
+    this.state.lang = code;
+    $$('[data-i18n]').forEach(el=>{ el.textContent = t(el.dataset.i18n); });
+    $$('.lang-switch button').forEach(b=>b.classList.toggle('on', b.dataset.lang===code));
+    if(this.state.screen==='identity') RENDERERS.identity(); // re-render con textos nuevos
+    if(this.state.screen==='landing')  RENDERERS.landing();
+  },
+
+  // ---- cambiar de pantalla
+  go(name){
+    this.state.screen = name;
+    $$('.screen').forEach(s=>s.classList.toggle('active', s.id==='screen-'+name));
+    if(RENDERERS[name]) RENDERERS[name]();
+    window.scrollTo({top:0,behavior:'smooth'});
+  },
+
+  toast(msg){
+    $('#toast-msg').textContent = msg;
+    const el=$('#toast'); el.classList.add('show');
+    clearTimeout(this._tt); this._tt=setTimeout(()=>el.classList.remove('show'),2600);
+  },
+
+  wireGlobal(){
+    // listeners delegados para controles que se re-renderizan
+    document.addEventListener('click', e=>{
+      const langBtn = e.target.closest('.lang-switch button');
+      if(langBtn){ this.applyLang(langBtn.dataset.lang); return; }
+    });
+  }
+};
+
+/* =========================================================
+   RENDERERS  (Parte 1: landing + identity + placeholders)
+   Las partes 2..10 sobrescriben:  RENDERERS.career = fn; etc.
+   ========================================================= */
+const RENDERERS = {
+
+  landing(){
+    $('#screen-landing').innerHTML = `
+      <div class="hero">
+        <div class="hero-art" aria-hidden="true">
+          <div class="sil s1"></div><div class="sil s2"></div><div class="sil s3"></div>
+          <div class="num">10</div>
+          <svg class="cup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 0 12 0V3H6z"/><path d="M6 5H3v2a3 3 0 0 0 3 3M18 5h3v2a3 3 0 0 1-3 3M9 21h6M12 15v6"/></svg>
+        </div>
+        <div class="hero-copy">
+          <div class="hero-top">
+            <span class="eyebrow">${t('eyebrow')}</span>
+            <div class="lang-switch" role="group" aria-label="Idioma">
+              <button data-lang="es" class="on">${flagImg('AR')} ES</button>
+              <button data-lang="en">${flagImg('GB')} EN</button>
+              <button data-lang="pt">${flagImg('BR')} PT</button>
             </div>
+          </div>
+          <h1>${t('hero_title')}</h1>
+          <p>${t('hero_text')}</p>
+          <div class="hero-actions">
+            <button class="btn btn-white btn-lg" id="btn-start">${t('start')}</button>
+            <button class="btn btn-ghost btn-lg" id="btn-backgames">${t('back_games')}</button>
+          </div>
+        </div>
+      </div>`;
+    $('#btn-start').onclick     = ()=>App.go('identity');
+    $('#btn-backgames').onclick = ()=>App.toast('↩ Volviendo a la sección Juegos…');
+  },
+
+  identity(){
+    const I = App.state.identity;
+    const q = (I.search||'').trim().toLowerCase();
+    const countries = DATA.COUNTRIES.filter(c=>
+        !q || c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q));
+
+    const countryRows = countries.map(c=>`
+      <div class="country ${I.nationality===c.code?'sel':''}" data-country="${c.code}">
+        ${flagImg(c.code)} <span>${c.name}</span>
+      </div>`).join('') || `<div class="muted" style="grid-column:1/-1;padding:14px">—</div>`;
+
+    const posDots = DATA.POSITIONS.map(p=>`
+      <button class="pos ${I.position===p.id?'sel':''}" data-pos="${p.id}"
+        style="left:${p.x}%;top:${p.y}%" title="${p.id}">${p.label}</button>`).join('');
+
+    const surnameShow = (I.surname||'APELLIDO').toUpperCase();
+
+    $('#screen-identity').innerHTML = `
+      <h2 class="page-title">${t('id_title')}</h2>
+      <div class="id-grid">
+
+        <!-- COLUMNA 1: IDENTIDAD -->
+        <div class="id-col">
+          <h3>${t('col_id')}</h3>
+          <div class="jersey-wrap">
+            <div class="jersey">
+              <div class="jname">${surnameShow}</div>
+              <div class="jnum">${clamp(parseInt(I.number)||10,1,99)}</div>
+            </div>
+            <div class="field-row">
+              <div class="field-input">
+                <label>${t('surname')}</label>
+                <input class="inp" id="in-surname" maxlength="14" placeholder="APELLIDO" value="${I.surname||''}">
+              </div>
+              <div class="field-input">
+                <label>${t('number')}</label>
+                <input class="inp" id="in-number" type="number" min="1" max="99" value="${I.number}">
+              </div>
+            </div>
+            <div class="foot-toggle">
+              <label style="font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--muted-2);text-align:center">${t('foot')}</label>
+              <div class="seg" id="foot-seg">
+                <button data-foot="left"  class="${I.foot==='left'?'on':''}">${t('left')}</button>
+                <button data-foot="right" class="${I.foot==='right'?'on':''}">${t('right')}</button>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div style="text-align: center; margin-top: 40px;">
-            <button class="btn btn-random" onclick="randomPlayer()" style="max-width: 400px; margin: 0 auto 20px;">
-                🎲 Generar jugador aleatorio
-            </button>
-            <button class="btn btn-primary" onclick="startGame()">Comenzar carrera</button>
-        </div>
-    </div>
-
-    <!-- PANTALLA DE JUEGO -->
-    <div id="gameScreen" class="game-screen hidden">
-        <div class="game-header">
-            <div class="player-card-header">
-                <div class="ovr-badge">
-                    <div class="ovr-value" id="ovrValue">50</div>
-                    <div class="ovr-label">OVR</div>
-                </div>
-                <div class="player-info">
-                    <h2 id="playerFullName">Rodríguez</h2>
-                    <div class="player-meta">
-                        <span id="playerClub">Libre</span> • 
-                        <span id="playerPosition">#10 MCO</span> • 
-                        Edad: <span id="playerAge">16</span>
-                    </div>
-                </div>
-            </div>
-            <div class="stats-bar">
-                <div class="stat-item">
-                    <div class="stat-value" id="statPJ">0</div>
-                    <div class="stat-label">PJ</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="statGLS">0</div>
-                    <div class="stat-label">GLS</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="statAST">0</div>
-                    <div class="stat-label">AST</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="statValor">€100K</div>
-                    <div class="stat-label">VALOR</div>
-                </div>
-            </div>
+        <!-- COLUMNA 2: NACIONALIDAD -->
+        <div class="id-col">
+          <h3>${t('col_nat')}</h3>
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="in-search" placeholder="${t('search_country')}" value="${I.search||''}">
+          </div>
+          <div class="country-list" id="country-list">${countryRows}</div>
         </div>
 
-        <div class="game-content">
-            <div class="main-content">
-                <div class="age-display" id="currentAge">16</div>
-                <div class="age-label" id="currentYear">Año 2024</div>
-                
-                <div id="eventContainer">
-                    <!-- Los eventos se generan dinámicamente -->
-                </div>
-            </div>
-
-            <div class="timeline-panel">
-                <div class="timeline-title">📅 Tu carrera</div>
-                <div class="timeline-list" id="timelineList">
-                    <!-- Timeline se genera dinámicamente -->
-                </div>
-            </div>
+        <!-- COLUMNA 3: POSICIÓN -->
+        <div class="id-col">
+          <h3>${t('col_pos')}</h3>
+          <div class="pitch">
+            <div class="mid"></div><div class="circle"></div>
+            <div class="box-t"></div><div class="box-b"></div>
+            ${posDots}
+          </div>
         </div>
-    </div>
+      </div>
 
-    <!-- MODAL -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <h3 class="modal-title" id="modalTitle">Título</h3>
-            <p class="modal-text" id="modalText">Texto</p>
-            <button class="btn btn-primary" onclick="closeModal()" style="width: 100%;">Continuar</button>
-        </div>
-    </div>
+      <div class="id-foot">
+        <button class="btn btn-ghost" id="btn-id-back">${t('back')}</button>
+        <button class="btn btn-ghost" id="btn-id-confirm" style="opacity:.6">${t('confirm')}</button>
+      </div>`;
 
-    <script>
-        // BASE DE DATOS
-        const database = {
-            padresReales: [
-                { nombre: "Lionel Messi", tecnica: 95, fisico: 65, mental: 90, probabilidad: 0.02 },
-                { nombre: "Diego Maradona", tecnica: 95, fisico: 70, mental: 85, probabilidad: 0.01 },
-                { nombre: "Cristiano Ronaldo", tecnica: 85, fisico: 95, mental: 95, probabilidad: 0.02 },
-                { nombre: "Neymar Jr", tecnica: 90, fisico: 70, mental: 75, probabilidad: 0.01 },
-                { nombre: "Sergio Agüero", tecnica: 85, fisico: 75, mental: 80, probabilidad: 0.01 },
-                { nombre: "Carlos Tevez", tecnica: 80, fisico: 85, mental: 90, probabilidad: 0.01 },
-                { nombre: "Juan Román Riquelme", tecnica: 90, fisico: 65, mental: 85, probabilidad: 0.01 },
-                { nombre: "Ángel Di María", tecnica: 85, fisico: 80, mental: 85, probabilidad: 0.01 },
-                { nombre: "Javier Mascherano", tecnica: 75, fisico: 80, mental: 95, probabilidad: 0.01 },
-                { nombre: "Gabriel Batistuta", tecnica: 85, fisico: 85, mental: 85, probabilidad: 0.01 },
-                { nombre: "Zinedine Zidane", tecnica: 95, fisico: 80, mental: 90, probabilidad: 0.01 },
-                { nombre: "Ronaldinho", tecnica: 95, fisico: 75, mental: 80, probabilidad: 0.01 },
-                { nombre: "Paolo Maldini", tecnica: 85, fisico: 85, mental: 95, probabilidad: 0.01 },
-                { nombre: "Thierry Henry", tecnica: 90, fisico: 85, mental: 85, probabilidad: 0.01 },
-                { nombre: "Francesco Totti", tecnica: 90, fisico: 75, mental: 90, probabilidad: 0.01 }
-            ],
-            periodistas: [
-                { nombre: "Diego Monroig", tipo: "polémico", frase: "¡Esto es un escándalo!" },
-                { nombre: "El Pollo Vignolo", tipo: "entusiasta", frase: "¡Esto es fútbol, carajo!" },
-                { nombre: "Pablo Girald", tipo: "emocional", frase: "¡GOOOOOL! ¡No puede ser!" },
-                { nombre: "Marcelo Araujo", tipo: "histórico", frase: "¡Histórico!" },
-                { nombre: "Fernando Niembro", tipo: "crítico", frase: "Acá no hay lugar para todos" },
-                { nombre: "Mariano Closs", tipo: "técnico", frase: "¡Qué jugada, pibe!" }
-            ],
-            clubes: {
-                Argentina: [
-                    { nombre: "River Plate", nivel: 5, prestigio: 95 },
-                    { nombre: "Boca Juniors", nivel: 5, prestigio: 95 },
-                    { nombre: "Racing", nivel: 4, prestigio: 80 },
-                    { nombre: "Independiente", nivel: 4, prestigio: 80 },
-                    { nombre: "San Lorenzo", nivel: 4, prestigio: 75 },
-                    { nombre: "Vélez", nivel: 4, prestigio: 75 },
-                    { nombre: "Lanús", nivel: 3, prestigio: 70 },
-                    { nombre: "Temperley", nivel: 2, prestigio: 60 },
-                    { nombre: "Colegiales", nivel: 1, prestigio: 40 },
-                    { nombre: "Ciudad de Bolívar", nivel: 1, prestigio: 35 }
-                ],
-                Brasil: [
-                    { nombre: "Flamengo", nivel: 5, prestigio: 95 },
-                    { nombre: "Palmeiras", nivel: 5, prestigio: 90 },
-                    { nombre: "Corinthians", nivel: 4, prestigio: 85 },
-                    { nombre: "São Paulo", nivel: 4, prestigio: 80 },
-                    { nombre: "Santos", nivel: 4, prestigio: 75 }
-                ],
-                España: [
-                    { nombre: "Real Madrid", nivel: 5, prestigio: 100 },
-                    { nombre: "Barcelona", nivel: 5, prestigio: 100 },
-                    { nombre: "Atlético Madrid", nivel: 5, prestigio: 90 },
-                    { nombre: "Sevilla", nivel: 4, prestigio: 80 }
-                ],
-                Inglaterra: [
-                    { nombre: "Manchester City", nivel: 5, prestigio: 95 },
-                    { nombre: "Liverpool", nivel: 5, prestigio: 95 },
-                    { nombre: "Arsenal", nivel: 5, prestigio: 90 },
-                    { nombre: "Chelsea", nivel: 5, prestigio: 90 }
-                ],
-                Italia: [
-                    { nombre: "Inter Milan", nivel: 5, prestigio: 90 },
-                    { nombre: "AC Milan", nivel: 5, prestigio: 90 },
-                    { nombre: "Juventus", nivel: 5, prestigio: 95 },
-                    { nombre: "Napoli", nivel: 4, prestigio: 85 }
-                ],
-                Alemania: [
-                    { nombre: "Bayern Munich", nivel: 5, prestigio: 95 },
-                    { nombre: "Borussia Dortmund", nivel: 4, prestigio: 85 }
-                ],
-                Francia: [
-                    { nombre: "PSG", nivel: 5, prestigio: 90 },
-                    { nombre: "Marseille", nivel: 4, prestigio: 75 }
-                ]
-            },
-            entrenadores: [
-                { nombre: "Marcelo Bielsa", estilo: "Intenso", edadMin: 18, edadMax: 35 },
-                { nombre: "Diego Simeone", estilo: "Garra", edadMin: 20, edadMax: 35 },
-                { nombre: "Marcelo Gallardo", estilo: "Táctico", edadMin: 16, edadMax: 30 },
-                { nombre: "Pep Guardiola", estilo: "Técnico", edadMin: 18, edadMax: 35 },
-                { nombre: "Jürgen Klopp", estilo: "Presión", edadMin: 18, edadMax: 35 },
-                { nombre: "Carlo Ancelotti", estilo: "Experiencia", edadMin: 22, edadMax: 38 }
-            ]
-        };
+    // --- wiring de la pantalla identidad (UI; la creación real del jugador va en Parte 2)
+    $('#in-surname').oninput = e=>{ I.surname=e.target.value; $('.jersey .jname').textContent=(I.surname||'APELLIDO').toUpperCase(); };
+    $('#in-number').oninput  = e=>{ I.number=e.target.value; $('.jersey .jnum').textContent=clamp(parseInt(I.number)||10,1,99); };
+    $('#in-search').oninput  = e=>{ I.search=e.target.value; RENDERERS.identity(); $('#in-search').focus();
+                                    const s=$('#in-search'); s.setSelectionRange(s.value.length,s.value.length); };
+    $('#foot-seg').onclick = e=>{ const b=e.target.closest('[data-foot]'); if(!b)return; I.foot=b.dataset.foot;
+                                  $$('#foot-seg button').forEach(x=>x.classList.toggle('on',x===b)); };
+    $('#country-list').onclick = e=>{ const r=e.target.closest('[data-country]'); if(!r)return;
+                                      I.nationality=r.dataset.country;
+                                      $$('#country-list .country').forEach(x=>x.classList.toggle('sel',x===r)); };
+    $('.pitch').onclick = e=>{ const p=e.target.closest('[data-pos]'); if(!p)return;
+                               I.position=p.dataset.pos;
+                               $$('.pitch .pos').forEach(x=>x.classList.toggle('sel',x===p)); };
+    $('#btn-id-back').onclick = ()=>App.go('landing');
+    $('#btn-id-confirm').onclick = ()=>{
+      if(!I.surname.trim() || !I.nationality || !I.position){ App.toast('⚠ '+t('need_identity')); return; }
+      // La construcción del State.player + OVR inicial se implementa en la PARTE 2.
+      App.toast('✓ Identidad lista · el motor de jugador llega en la Parte 2');
+      App.go('career');
+    };
+  },
 
-        // ESTADO DEL JUEGO
-        let gameState = {
-            jugador: {
-                apellido: "",
-                numero: 10,
-                pierna: "Derecha",
-                altura: 170,
-                complexion: "Atletico",
-                tipoFisico: "Genio",
-                nacionalidad: "Argentina",
-                claseSocial: "Obrero",
-                posicion: "Delantero",
-                padre: null,
-                stats: {
-                    tecnica: 50,
-                    fisico: 50,
-                    mental: 50,
-                    ovr: 50
-                },
-                psicologia: {
-                    autoestima: 50,
-                    presion: 50,
-                    ansiedad: 30,
-                    motivacion: 70
-                },
-                relaciones: {
-                    padres: 70,
-                    amigos: 50,
-                    dt: 50,
-                    hinchas: 50
-                }
-            },
-            carrera: {
-                edad: 5,
-                año: 2024,
-                club: null,
-                historia: [],
-                titulos: [],
-                eventos: []
-            },
-            suerte: 50
-        };
+  // Placeholders para módulos de partes futuras
+  career: ()=>placeholder('career','⚽','Motor de carrera + eventos','Partes 4 y 9'),
+  match : ()=>placeholder('match','','Simulador de partidos','Parte 5'),
+  offer : ()=>placeholder('offer','🤝','Ofertas y negociación','Parte 6'),
+  press : ()=>placeholder('press','🎙️','Prensa y periodistas','Parte 7'),
+  final : ()=>placeholder('final','🏁','Final de carrera + vitrina','Parte 10')
+};
 
-        // FUNCIONES DE CREACIÓN
-        function updatePreview() {
-            document.getElementById('previewName').textContent = document.getElementById('inputApellido').value.toUpperCase() || 'APELLIDO';
-            document.getElementById('previewNumber').textContent = document.getElementById('inputNumero').value;
-        }
+function placeholder(screen,icon,title,part){
+  $('#screen-'+screen).innerHTML = `
+    <div class="ph"><div class="ph-card">
+      <div class="ph-badge">${icon} MÓDULO EN CONSTRUCCIÓN</div>
+      <h2>${title}</h2>
+      <p class="muted">${t('ph_soon')}<br>Se implementa en la <b style="color:var(--indigo-2)">${part}</b>.</p>
+      <div style="margin-top:26px"><button class="btn btn-ghost" onclick="App.go('identity')">← ${t('back')}</button></div>
+    </div></div>`;
+}
 
-        function randomPlayer() {
-            const apellidos = ["Rodríguez", "González", "Fernández", "López", "Martínez", "García", "Pérez", "Sánchez", "Romero", "Díaz"];
-            const numeros = [7, 9, 10, 11, 8, 6, 4, 5];
-            
-            document.getElementById('inputApellido').value = apellidos[Math.floor(Math.random() * apellidos.length)];
-            document.getElementById('inputNumero').value = numeros[Math.floor(Math.random() * numeros.length)];
-            document.getElementById('inputPierna').value = Math.random() > 0.5 ? "Izquierda" : "Derecha";
-            document.getElementById('inputAltura').value = [165, 170, 175, 180, 185][Math.floor(Math.random() * 5)];
-            document.getElementById('inputComplexion').value = ["Delgado", "Atletico", "Robusto"][Math.floor(Math.random() * 3)];
-            document.getElementById('inputTipoFisico').value = ["Tanque", "Cristal", "Profesional", "Genio", "Guerrero"][Math.floor(Math.random() * 5)];
-            document.getElementById('inputNacionalidad').value = ["Argentina", "Brasil", "España", "Inglaterra", "Italia", "Alemania", "Francia"][Math.floor(Math.random() * 7)];
-            document.getElementById('inputClaseSocial').value = ["Villa", "Obrero", "Media", "Alta"][Math.floor(Math.random() * 4)];
-            document.getElementById('inputPosicion').value = ["Arquero", "Defensor", "Mediocampista", "Delantero"][Math.floor(Math.random() * 4)];
-            
-            updatePreview();
-            showModal("🎲 Jugador Generado", "Se ha creado un jugador aleatorio con genética y origen únicos.");
-        }
+/* =========================================================
+   ARRANQUE
+   ========================================================= */
+App.init();
 
-        function showCreationScreen() {
-            document.getElementById('homeScreen').classList.add('hidden');
-            document.getElementById('creationScreen').classList.remove('hidden');
-            updatePreview();
-        }
-
-        function startGame() {
-            // Guardar datos del jugador
-            gameState.jugador.apellido = document.getElementById('inputApellido').value;
-            gameState.jugador.numero = parseInt(document.getElementById('inputNumero').value);
-            gameState.jugador.pierna = document.getElementById('inputPierna').value;
-            gameState.jugador.altura = parseInt(document.getElementById('inputAltura').value);
-            gameState.jugador.complexion = document.getElementById('inputComplexion').value;
-            gameState.jugador.tipoFisico = document.getElementById('inputTipoFisico').value;
-            gameState.jugador.nacionalidad = document.getElementById('inputNacionalidad').value;
-            gameState.jugador.claseSocial = document.getElementById('inputClaseSocial').value;
-            gameState.jugador.posicion = document.getElementById('inputPosicion').value;
-
-            // Calcular genética y stats base
-            calcularGenetica();
-            
-            // Calcular suerte
-            gameState.suerte = Math.floor(Math.random() * 100) + 1;
-
-            // Iniciar juego
-            document.getElementById('creationScreen').classList.add('hidden');
-            document.getElementById('gameScreen').classList.remove('hidden');
-            
-            // Iniciar carrera
-            iniciarCarrera();
-        }
-
-        function calcularGenetica() {
-            // 15% probabilidad de ser hijo de jugador real
-            const esHijoReal = Math.random() < 0.15;
-            
-            if (esHijoReal) {
-                // Seleccionar padre real
-                const rand = Math.random();
-                let acumulador = 0;
-                
-                for (let padre of database.padresReales) {
-                    acumulador += padre.probabilidad;
-                    if (rand <= acumulador) {
-                        gameState.jugador.padre = padre;
-                        gameState.jugador.apellido = padre.nombre.split(' ')[1] || padre.nombre;
-                        break;
-                    }
-                }
-                
-                if (!gameState.jugador.padre) {
-                    gameState.jugador.padre = database.padresReales[0];
-                }
-                
-                // Heredar stats del padre
-                const padre = gameState.jugador.padre;
-                gameState.jugador.stats.tecnica = Math.floor(padre.tecnica * 0.6 + Math.random() * 30);
-                gameState.jugador.stats.fisico = Math.floor(padre.fisico * 0.6 + Math.random() * 30);
-                gameState.jugador.stats.mental = Math.floor(padre.mental * 0.6 + Math.random() * 30);
-            } else {
-                // Stats aleatorios basados en tipo físico
-                const tipo = gameState.jugador.tipoFisico;
-                
-                switch(tipo) {
-                    case "Tanque":
-                        gameState.jugador.stats = { tecnica: 40 + Math.random() * 20, fisico: 70 + Math.random() * 20, mental: 60 + Math.random() * 20 };
-                        break;
-                    case "Cristal":
-                        gameState.jugador.stats = { tecnica: 70 + Math.random() * 20, fisico: 40 + Math.random() * 20, mental: 50 + Math.random() * 20 };
-                        break;
-                    case "Profesional":
-                        gameState.jugador.stats = { tecnica: 65 + Math.random() * 15, fisico: 70 + Math.random() * 15, mental: 75 + Math.random() * 15 };
-                        break;
-                    case "Genio":
-                        gameState.jugador.stats = { tecnica: 75 + Math.random() * 20, fisico: 50 + Math.random() * 20, mental: 60 + Math.random() * 20 };
-                        break;
-                    case "Guerrero":
-                        gameState.jugador.stats = { tecnica: 60 + Math.random() * 20, fisico: 70 + Math.random() * 20, mental: 80 + Math.random() * 15 };
-                        break;
-                    default:
-                        gameState.jugador.stats = { tecnica: 50 + Math.random() * 20, fisico: 50 + Math.random() * 20, mental: 50 + Math.random() * 20 };
-                }
-            }
-            
-            // Calcular OVR
-            gameState.jugador.stats.ovr = Math.floor((gameState.jugador.stats.tecnica + gameState.jugador.stats.fisico + gameState.jugador.stats.mental) / 3);
-            
-            // Ajustar psicología según origen
-            if (gameState.jugador.claseSocial === "Villa") {
-                gameState.jugador.psicologia.motivacion = 80 + Math.random() * 20;
-                gameState.jugador.psicologia.presion = 60 + Math.random() * 20;
-            } else if (gameState.jugador.claseSocial === "Alta") {
-                gameState.jugador.psicologia.autoestima = 60 + Math.random() * 20;
-                gameState.jugador.psicologia.presion = 70 + Math.random() * 20;
-            }
-            
-            // Si es hijo de famoso, más presión
-            if (gameState.jugador.padre) {
-                gameState.jugador.psicologia.presion = 80 + Math.random() * 20;
-                gameState.jugador.psicologia.autoestima = 40 + Math.random() * 30;
-            }
-        }
-
-        function iniciarCarrera() {
-            gameState.carrera.edad = 5;
-            gameState.carrera.año = 2024;
-            gameState.carrera.historia = [];
-            
-            actualizarUI();
-            generarEvento();
-        }
-
-        function generarEvento() {
-            const edad = gameState.carrera.edad;
-            const container = document.getElementById('eventContainer');
-            container.innerHTML = '';
-            
-            let evento = null;
-            
-            // Generar evento según edad
-            if (edad >= 5 && edad <= 11) {
-                evento = generarEventoInfancia();
-            } else if (edad >= 12 && edad <= 15) {
-                evento = generarEventoPreAdolescencia();
-            } else if (edad >= 16 && edad <= 18) {
-                evento = generarEventoAdolescencia();
-            } else if (edad >= 19 && edad <= 24) {
-                evento = generarEventoJuventud();
-            } else if (edad >= 25 && edad <= 30) {
-                evento = generarEventoMadurez();
-            } else {
-                evento = generarEventoDeclive();
-            }
-            
-            // Renderizar evento
-            const eventCard = document.createElement('div');
-            eventCard.className = 'event-card fade-in';
-            eventCard.innerHTML = `
-                <div class="event-title">${evento.titulo}</div>
-                <div class="event-description">${evento.descripcion}</div>
-                <div class="decision-buttons">
-                    ${evento.opciones.map((opt, idx) => `
-                        <button class="decision-btn" onclick="tomarDecision(${idx})">
-                            <h4>${opt.titulo}</h4>
-                            <p>${opt.descripcion}</p>
-                            <div class="decision-effects">
-                                ${opt.efectos.map(ef => `
-                                    <span class="${ef.cambio > 0 ? 'effect-positive' : 'effect-negative'}">
-                                        ${ef.cambio > 0 ? '✓' : '✗'} ${ef.texto}
-                                    </span>
-                                `).join('')}
-                            </div>
-                        </button>
-                    `).join('')}
-                </div>
-            `;
-            
-            container.appendChild(eventCard);
-        }
-
-        function generarEventoInfancia() {
-            const eventos = [
-                {
-                    titulo: "Primeros pasos en el fútbol",
-                    descripcion: `Tus padres te llevan a la cancha del barrio. Tenés ${gameState.carrera.edad} años y es tu primera vez jugando al fútbol organizado.`,
-                    opciones: [
-                        {
-                            titulo: "Jugar por diversión",
-                            descripcion: "Tus padres deciden que juegues sin presión, solo para divertirte.",
-                            efectos: [
-                                { texto: "+Diversión", cambio: 10 },
-                                { texto: "-Progreso lento", cambio: -5 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.psicologia.motivacion += 10;
-                                gameState.jugador.stats.tecnica += 2;
-                            }
-                        },
-                        {
-                            titulo: "Empezar en serio",
-                            descripcion: "Tus padres quieren que te tomes el fútbol en serio desde chico.",
-                            efectos: [
-                                { texto: "+Progreso rápido", cambio: 15 },
-                                { texto: "-Presión", cambio: -10 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.stats.tecnica += 5;
-                                gameState.jugador.psicologia.presion += 15;
-                            }
-                        }
-                    ]
-                },
-                {
-                    titulo: "Escuela vs Fútbol",
-                    descripcion: "Tus notas en la escuela están bajando porque preferís entrenar. Tus padres están preocupados.",
-                    opciones: [
-                        {
-                            titulo: "Estudiar más",
-                            descripcion: "Dedicás más tiempo a la escuela, menos al fútbol.",
-                            efectos: [
-                                { texto: "+Educación", cambio: 10 },
-                                { texto: "-Entrenamiento", cambio: -5 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.psicologia.mental += 5;
-                                gameState.jugador.stats.tecnica += 1;
-                            }
-                        },
-                        {
-                            titulo: "Entrenar más",
-                            descripcion: "Seguís enfocándote en el fútbol, aunque bajes las notas.",
-                            efectos: [
-                                { texto: "+Fútbol", cambio: 10 },
-                                { texto: "-Notas", cambio: -10 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.stats.tecnica += 5;
-                                gameState.jugador.psicologia.autoestima -= 5;
-                            }
-                        }
-                    ]
-                },
-                {
-                    titulo: "Primer torneo infantil",
-                    descripcion: "Jugás tu primer torneo. Hacés 2 goles y todos te felicitan.",
-                    opciones: [
-                        {
-                            titulo: "Seguir entrenando",
-                            descripcion: "Te motivás y entrenás más duro.",
-                            efectos: [
-                                { texto: "+Motivación", cambio: 15 },
-                                { texto: "+Técnica", cambio: 5 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.psicologia.motivacion += 15;
-                                gameState.jugador.stats.tecnica += 5;
-                            }
-                        },
-                        {
-                            titulo: "Relajarse",
-                            descripcion: "Disfrutás el momento sin presionarte.",
-                            efectos: [
-                                { texto: "+Diversión", cambio: 10 },
-                                { texto: "-Progreso", cambio: -5 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.psicologia.ansiedad -= 10;
-                            }
-                        }
-                    ]
-                }
-            ];
-            
-            return eventos[Math.floor(Math.random() * eventos.length)];
-        }
-
-        function generarEventoPreAdolescencia() {
-            const eventos = [
-                {
-                    titulo: "Prueba en club grande",
-                    descripcion: `Un ojeador de ${gameState.jugador.nacionalidad === 'Argentina' ? 'River Plate' : 'Barcelona'} te invita a una prueba. Es tu gran oportunidad.`,
-                    opciones: [
-                        {
-                            titulo: "Aceptar la prueba",
-                            descripcion: "Viajás para hacer la prueba. Es arriesgado pero puede cambiar tu vida.",
-                            efectos: [
-                                { texto: "+Oportunidad", cambio: 20 },
-                                { texto: "Riesgo de fracaso", cambio: -10 }
-                            ],
-                            accion: () => {
-                                const exito = Math.random() < (gameState.jugador.stats.tecnica / 100);
-                                if (exito) {
-                                    gameState.carrera.club = { nombre: "Inferiores", nivel: 4 };
-                                    gameState.jugador.stats.tecnica += 10;
-                                    showModal("¡Prueba Aprobada!", "Entraste a las inferiores del club grande. Tu carrera despega.");
-                                } else {
-                                    gameState.jugador.psicologia.autoestima -= 10;
-                                    showModal("Prueba Fallida", "No pasaste la prueba. Pero podés intentarlo de nuevo.");
-                                }
-                            }
-                        },
-                        {
-                            titulo: "Rechazar",
-                            descripcion: "Preferís quedarte en tu club de barrio por ahora.",
-                            efectos: [
-                                { texto: "+Estabilidad", cambio: 5 },
-                                { texto: "-Oportunidad", cambio: -15 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.psicologia.ansiedad -= 5;
-                            }
-                        }
-                    ]
-                },
-                {
-                    titulo: "Crecimiento físico",
-                    descripcion: "Estás creciendo rápido. Tus compañeros son más altos que vos.",
-                    opciones: [
-                        {
-                            titulo: "Entrenar fuerza",
-                            descripcion: "Hacés ejercicios para ganar físico.",
-                            efectos: [
-                                { texto: "+Físico", cambio: 10 },
-                                { texto: "-Técnica temporal", cambio: -5 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.stats.fisico += 10;
-                                gameState.jugador.stats.tecnica -= 3;
-                            }
-                        },
-                        {
-                            titulo: "Aceptar y esperar",
-                            descripcion: "Sabés que vas a crecer, tenés paciencia.",
-                            efectos: [
-                                { texto: "+Paciencia", cambio: 10 },
-                                { texto: "Sin cambios", cambio: 0 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.psicologia.mental += 5;
-                            }
-                        }
-                    ]
-                }
-            ];
-            
-            return eventos[Math.floor(Math.random() * eventos.length)];
-        }
-
-        function generarEventoAdolescencia() {
-            const eventos = [
-                {
-                    titulo: "Debut en Reserva",
-                    descripcion: `El DT te llama para jugar en reserva. Es tu primer paso al fútbol profesional.`,
-                    opciones: [
-                        {
-                            titulo: "Aceptar el desafío",
-                            descripcion: "Entrás a la reserva. Es más rápido y fuerte.",
-                            efectos: [
-                                { texto: "+Experiencia", cambio: 15 },
-                                { texto: "+Presión", cambio: 10 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.stats.ovr += 5;
-                                gameState.jugador.psicologia.presion += 10;
-                                gameState.carrera.club = { nombre: "Reserva", nivel: 3 };
-                            }
-                        },
-                        {
-                            titulo: "Pedir más tiempo",
-                            descripcion: "Preferís seguir en juveniles un tiempo más.",
-                            efectos: [
-                                { texto: "+Desarrollo", cambio: 5 },
-                                { texto: "-Oportunidad", cambio: -10 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.stats.tecnica += 5;
-                            }
-                        }
-                    ]
-                },
-                {
-                    titulo: "Lesión grave",
-                    descripcion: "Te lesionás el ligamento cruzado en un entrenamiento. Necesitás cirugía.",
-                    opciones: [
-                        {
-                            titulo: "Operación inmediata",
-                            descripcion: "Te operás ya. Vas a estar 6 meses fuera.",
-                            efectos: [
-                                { texto: "6 meses fuera", cambio: -20 },
-                                { texto: "+Recuperación completa", cambio: 10 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.stats.fisico -= 5;
-                                gameState.jugador.psicologia.motivacion -= 10;
-                            }
-                        },
-                        {
-                            titulo: "Rehabilitación natural",
-                            descripcion: "Intentás recuperarte sin operar. Es más rápido pero riesgoso.",
-                            efectos: [
-                                { texto: "3 meses fuera", cambio: -10 },
-                                { texto: "Riesgo de secuelas", cambio: -15 }
-                            ],
-                            accion: () => {
-                                if (Math.random() < 0.3) {
-                                    gameState.jugador.stats.fisico -= 15;
-                                    showModal("Secuelas", "La lesión no sanó bien. Tu físico se resintió.");
-                                }
-                            }
-                        }
-                    ]
-                }
-            ];
-            
-            return eventos[Math.floor(Math.random() * eventos.length)];
-        }
-
-        function generarEventoJuventud() {
-            const eventos = [
-                {
-                    titulo: "Debut en Primera",
-                    descripcion: "El DT te hace debutar en primera. Es el momento que soñaste toda tu vida.",
-                    opciones: [
-                        {
-                            titulo: "Jugar con todo",
-                            descripcion: "Das el 100% desde el primer minuto.",
-                            efectos: [
-                                { texto: "+Rendimiento", cambio: 15 },
-                                { texto: "+Fama", cambio: 10 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.stats.ovr += 8;
-                                gameState.jugador.psicologia.autoestima += 15;
-                                gameState.carrera.club = { nombre: "Primera", nivel: 5 };
-                            }
-                        },
-                        {
-                            titulo: "Jugar seguro",
-                            descripcion: "No querés cometer errores, jugás conservador.",
-                            efectos: [
-                                { texto: "+Seguridad", cambio: 5 },
-                                { texto: "-Impacto", cambio: -10 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.psicologia.ansiedad -= 5;
-                            }
-                        }
-                    ]
-                },
-                {
-                    titulo: "Oferta del exterior",
-                    descripcion: "Un club europeo te ofrece un contrato millonario. Es tu sueño pero es lejos de casa.",
-                    opciones: [
-                        {
-                            titulo: "Aceptar",
-                            descripcion: "Te vas a Europa. Es un salto enorme en tu carrera.",
-                            efectos: [
-                                { texto: "+Dinero", cambio: 50 },
-                                { texto: "+Nivel", cambio: 15 },
-                                { texto: "-Familia", cambio: -10 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.stats.ovr += 10;
-                                gameState.jugador.psicologia.autoestima += 10;
-                                gameState.carrera.club = { nombre: "Europa", nivel: 5 };
-                            }
-                        },
-                        {
-                            titulo: "Quedarse",
-                            descripcion: "Preferís seguir en tu club, sos ídolo local.",
-                            efectos: [
-                                { texto: "+Leyenda local", cambio: 20 },
-                                { texto: "-Dinero", cambio: -20 }
-                            ],
-                            accion: () => {
-                                gameState.jugador.psicologia.motivacion += 10;
-                            }
-                        }
-                    ]
-                }
-            ];
-            
-            return eventos[Math.floor(Math.random() * eventos.length)];
-        }
-
-        function generarEventoMadurez() {
-            return {
-                titulo: "Cúspide de tu carrera",
-                descripcion: "Estás en tu mejor momento. Tenés que decidir cómo aprovecharlo.",
-                opciones: [
-                    {
-                        titulo: "Exigirte al máximo",
-                        descripcion: "Entrenás como nunca, querés ser el mejor del mundo.",
-                        efectos: [
-                            { texto: "+Rendimiento", cambio: 15 },
-                            { texto: "-Salud", cambio: -10 }
-                        ],
-                        accion: () => {
-                            gameState.jugador.stats.ovr += 5;
-                            gameState.jugador.stats.fisico -= 5;
-                        }
-                    },
-                    {
-                        titulo: "Cuidar el cuerpo",
-                        descripcion: "Sabés que no sos joven, entrenás inteligente.",
-                        efectos: [
-                            { texto: "+Longevidad", cambio: 15 },
-                            { texto: "-Rendimiento pico", cambio: -5 }
-                        ],
-                        accion: () => {
-                            gameState.jugador.stats.fisico += 5;
-                        }
-                    }
-                ]
-            };
-        }
-
-        function generarEventoDeclive() {
-            return {
-                titulo: "Declive físico",
-                descripcion: "Ya no sos el de antes. Las lesiones son más frecuentes. Tenés que decidir tu futuro.",
-                opciones: [
-                    {
-                        titulo: "Retirarte en la cima",
-                        descripcion: "Te retirás siendo leyenda, en tu mejor momento posible.",
-                        efectos: [
-                            { texto: "+Leyenda", cambio: 30 },
-                            { texto: "Fin de carrera", cambio: 0 }
-                        ],
-                        accion: () => {
-                            finalizarCarrera("Leyenda");
-                        }
-                    },
-                    {
-                        titulo: "Bajar a liga menor",
-                        descripcion: "Seguís jugando pero en una liga más accesible.",
-                        efectos: [
-                            { texto: "+Dinero", cambio: 20 },
-                            { texto: "-Prestigio", cambio: -15 }
-                        ],
-                        accion: () => {
-                            gameState.carrera.club = { nombre: "Liga Menor", nivel: 2 };
-                        }
-                    }
-                ]
-            };
-        }
-
-        function tomarDecision(opcionIdx) {
-            const container = document.getElementById('eventContainer');
-            const eventCard = container.querySelector('.event-card');
-            const evento = eventCard.__evento || generarEventoParaEdad();
-            
-            if (evento && evento.opciones[opcionIdx]) {
-                // Ejecutar acción
-                evento.opciones[opcionIdx].accion();
-                
-                // Actualizar UI
-                actualizarUI();
-                
-                // Agregar a historia
-                gameState.carrera.historia.push({
-                    edad: gameState.carrera.edad,
-                    evento: evento.titulo,
-                    decision: evento.opciones[opcionIdx].titulo
-                });
-                
-                // Actualizar timeline
-                actualizarTimeline();
-                
-                // Avanzar edad (cada 2 años hasta los 16, luego cada año)
-                if (gameState.carrera.edad < 16) {
-                    gameState.carrera.edad += 2;
-                } else {
-                    gameState.carrera.edad += 1;
-                }
-                
-                gameState.carrera.año += 1;
-                
-                // Verificar si terminó la carrera
-                if (gameState.carrera.edad > 40) {
-                    finalizarCarrera("Retiro natural");
-                    return;
-                }
-                
-                // Generar nuevo evento
-                setTimeout(() => {
-                    generarEvento();
-                }, 500);
-            }
-        }
-
-        function generarEventoParaEdad() {
-            const edad = gameState.carrera.edad;
-            if (edad >= 5 && edad <= 11) return generarEventoInfancia();
-            if (edad >= 12 && edad <= 15) return generarEventoPreAdolescencia();
-            if (edad >= 16 && edad <= 18) return generarEventoAdolescencia();
-            if (edad >= 19 && edad <= 24) return generarEventoJuventud();
-            if (edad >= 25 && edad <= 30) return generarEventoMadurez();
-            return generarEventoDeclive();
-        }
-
-        function actualizarUI() {
-            const jugador = gameState.jugador;
-            const carrera = gameState.carrera;
-            
-            // Actualizar header
-            document.getElementById('ovrValue').textContent = Math.floor(jugador.stats.ovr);
-            document.getElementById('playerFullName').textContent = jugador.apellido;
-            document.getElementById('playerClub').textContent = carrera.club ? carrera.club.nombre : "Libre";
-            document.getElementById('playerPosition').textContent = `#${jugador.numero} ${jugador.posicion.substring(0, 3).toUpperCase()}`;
-            document.getElementById('playerAge').textContent = carrera.edad;
-            
-            // Actualizar stats
-            document.getElementById('statPJ').textContent = Math.floor(carrera.edad * 10);
-            document.getElementById('statGLS').textContent = Math.floor(carrera.edad * 2);
-            document.getElementById('statAST').textContent = Math.floor(carrera.edad * 1.5);
-            document.getElementById('statValor').textContent = `€${(jugador.stats.ovr * 10)}K`;
-            
-            // Actualizar edad
-            document.getElementById('currentAge').textContent = carrera.edad;
-            document.getElementById('currentYear').textContent = `Año ${carrera.año}`;
-        }
-
-        function actualizarTimeline() {
-            const timelineList = document.getElementById('timelineList');
-            timelineList.innerHTML = '';
-            
-            gameState.carrera.historia.slice(-5).forEach(h => {
-                const item = document.createElement('div');
-                item.className = 'timeline-item';
-                item.innerHTML = `
-                    <div class="timeline-age">${h.edad}</div>
-                    <div class="timeline-content">
-                        <div class="timeline-club">${h.evento}</div>
-                        <div class="timeline-stats">${h.decision}</div>
-                    </div>
-                `;
-                timelineList.appendChild(item);
-            });
-        }
-
-        function finalizarCarrera(tipo) {
-            const titulos = gameState.carrera.titulos.length;
-            const ovr = gameState.jugador.stats.ovr;
-            
-            let mensaje = `Tu carrera terminó: ${tipo}\n\n`;
-            mensaje += `Títulos: ${titulos}\n`;
-            mensaje += `OVR final: ${ovr}\n`;
-            mensaje += `Edad de retiro: ${gameState.carrera.edad}\n\n`;
-            
-            if (ovr >= 85 && titulos >= 5) {
-                mensaje += "🏆 LEGENDA MUNDIAL\nTe retirás como uno de los mejores de la historia.";
-            } else if (ovr >= 75 && titulos >= 3) {
-                mensaje += "⭐ ÍDOLO\nFuiste un gran jugador, recordado por tu club.";
-            } else if (ovr >= 65) {
-                mensaje += "👤 PROFESIONAL\nTuviste una carrera digna, viviste del fútbol.";
-            } else {
-                mensaje += "📝 FUTBOLISTA\nIntentaste ser profesional, pero no fue suficiente.";
-            }
-            
-            showModal("Carrera Finalizada", mensaje);
-            
-            setTimeout(() => {
-                location.reload();
-            }, 5000);
-        }
-
-        function showModal(titulo, texto) {
-            document.getElementById('modalTitle').textContent = titulo;
-            document.getElementById('modalText').textContent = texto;
-            document.getElementById('modal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-        }
-
-        function loadGame() {
-            showModal("Cargar partida", "Esta función estará disponible pronto. Por ahora, comenzá una nueva carrera.");
-        }
-
-        // Inicializar
-        updatePreview();
-    </script>
+// === FIN PARTE 1 === //
+// Las PARTES 2..10 se añaden a continuación sobrescribiendo
+// RENDERERS.<pantalla> = function(){...} y ampliando DATA / STATE.
+</script>
 </body>
 </html>
+// ============================================================
+// SIMULADOR DE CARRERA — PARTE 2 / 10
+// Identidad -> Jugador (creación, origen, fórmulas iniciales, ficha)
+// Pegar este bloque donde dice:  // === FIN PARTE 1 === //
+// ============================================================
+
+/* ---------- utilidades nuevas ---------- */
+function injectCSS(id, css){
+  if(document.getElementById(id)) return;
+  const s=document.createElement('style'); s.id=id; s.textContent=css; document.head.appendChild(s);
+}
+function weightedPick(arr, wfn){
+  const total=arr.reduce((s,x)=>s+wfn(x),0);
+  let r=Math.random()*total;
+  for(const x of arr){ r-=wfn(x); if(r<=0) return x; }
+  return arr[arr.length-1];
+}
+// makeCrest mejorado: IDs de clipPath únicos (evita colisiones en la vitrina, Parte 10)
+let _crestUID=0;
+function makeCrest(tag,c1,c2){
+  const uid='c'+(_crestUID++);
+  return `<svg viewBox="0 0 80 92" width="46" height="53" aria-hidden="true">
+    <defs><clipPath id="sh${uid}"><path d="M4 4 H76 V46 Q76 76 40 90 Q4 76 4 46 Z"/></clipPath></defs>
+    <g clip-path="url(#sh${uid})">
+      <rect width="40" height="92" fill="${c1}"/><rect x="40" width="40" height="92" fill="${c2}"/>
+    </g>
+    <path d="M4 4 H76 V46 Q76 76 40 90 Q4 76 4 46 Z" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="3"/>
+    <text x="40" y="52" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900"
+      font-size="22" fill="#fff" style="paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:2px">${tag}</text>
+  </svg>`;
+}
+
+/* ---------- DATA ampliada ---------- */
+// Contextos de origen (infancia). El "destino" elige uno; ajusta psicología, OVR y potencial.
+DATA.ORIGINS = [
+  {id:'barrio', weight:28, tier:3, ovrMod:-1, potentialMod:3,
+   title:{es:'Criado en el barrio',en:'Raised in the neighborhood',pt:'Criado no bairro'},
+   text:{es:'Creciste jugando al fútbol en la calle, entre amigos y picados interminables.',
+         en:'You grew up playing street football with friends and endless pickup games.',
+         pt:'Você cresceu jogando futebol de rua com amigos e rachas intermináveis.'},
+   psych:{resilience:8, happiness:6, confidence:-2}, tags:['familia','libertad','progreso_lento']},
+  {id:'cantera', weight:24, tier:1, ovrMod:2, potentialMod:5,
+   title:{es:'Cantera desde chico',en:'Academy kid',pt:'Base desde cedo'},
+   text:{es:'Entraste muy joven a la pensión de un club grande: disciplina y competencia diaria.',
+         en:'You joined a big club academy very young: discipline and daily competition.',
+         pt:'Entrou muito jovem na base de um clube grande: disciplina e competição diária.'},
+   psych:{motivation:6, confidence:4, happiness:-3}, tags:['disciplina','progreso_rapido','presion']},
+  {id:'familia_deportista', weight:18, tier:2, ovrMod:1, potentialMod:4,
+   title:{es:'Familia de deportistas',en:'Sporting family',pt:'Família de esportistas'},
+   text:{es:'En tu casa el deporte era ley. Creciste con hábitos sanos y mentalidad competitiva.',
+         en:'Sport was law at home. You grew up with healthy habits and a competitive mindset.',
+         pt:'Em casa o esporte era lei. Cresceu com hábitos saudáveis e mentalidade competitiva.'},
+   psych:{motivation:7, confidence:3, form:4}, tags:['disciplina','familia','roce']},
+  {id:'humilde', weight:22, tier:3, ovrMod:0, potentialMod:3,
+   title:{es:'Familia trabajadora',en:'Working-class family',pt:'Família trabalhadora'},
+   text:{es:'A tu familia le costaba llegar a fin de mes. El fútbol era tu salida y tu sueño.',
+         en:'Your family struggled to make ends meet. Football was your way out and your dream.',
+         pt:'Sua família tinha dificuldades. O futebol era sua saída e seu sonho.'},
+   psych:{resilience:9, motivation:6, happiness:-2}, tags:['familia','presion','progreso_rapido']},
+  {id:'acomodado', weight:8, tier:1, ovrMod:1, potentialMod:1,
+   title:{es:'Familia acomodada',en:'Well-off family',pt:'Família abastada'},
+   text:{es:'Nunca te faltó nada. Pudiste elegir clubes y formarte sin presión económica.',
+         en:'You never lacked anything. You could choose clubs and develop without financial pressure.',
+         pt:'Nunca te faltou nada. Pôde escolher clubes e se formar sem pressão financeira.'},
+   psych:{confidence:7, happiness:5, resilience:-5}, tags:['dinero','libertad','progreso_lento']}
+];
+
+// 12 rasgos de personalidad (arquetipo por posición + 1-2 generales al azar)
+DATA.PERSONALITY_TRAITS = {
+  goleador:    {label:{es:'Goleador',en:'Goalscorer',pt:'Artilheiro'},       desc:{es:'Instinto frente al arco.',en:'Instinct in front of goal.',pt:'Instinto diante do gol.'}},
+  muro:        {label:{es:'Muro',en:'Wall',pt:'Muralha'},                    desc:{es:'Sólido en defensa.',en:'Solid in defence.',pt:'Sólido na defesa.'}},
+  cerrojo:     {label:{es:'Cerrojo',en:'Lock',pt:'Cadeado'},                 desc:{es:'Seguro bajo los tres palos.',en:'Safe between the posts.',pt:'Seguro sob as traves.'}},
+  creativo:    {label:{es:'Creativo',en:'Playmaker',pt:'Criativo'},          desc:{es:'Genera juego y asistencias.',en:'Creates chances and assists.',pt:'Cria jogadas e assistências.'}},
+  ambicioso:   {label:{es:'Ambicioso',en:'Ambitious',pt:'Ambicioso'},        desc:{es:'Busca progresar rápido.',en:'Seeks fast progress.',pt:'Busca progresso rápido.'}},
+  familiar:    {label:{es:'Familiar',en:'Family-oriented',pt:'Família'},     desc:{es:'La familia es su motor.',en:'Family is his engine.',pt:'A família é seu motor.'}},
+  fiestero:    {label:{es:'Fiestero',en:'Party-lover',pt:'Festeiro'},        desc:{es:'Disfruta la noche; riesgo de disciplina.',en:'Loves the nightlife; discipline risk.',pt:'Curte a noite; risco de disciplina.'}},
+  disciplinado:{label:{es:'Disciplinado',en:'Disciplined',pt:'Disciplinado'},desc:{es:'Progreso constante y profesional.',en:'Steady, professional progress.',pt:'Progresso constante e profissional.'}},
+  lider:       {label:{es:'Líder',en:'Leader',pt:'Líder'},                   desc:{es:'Levanta al equipo.',en:'Lifts the team.',pt:'Levanta o time.'}},
+  timido:      {label:{es:'Tímido',en:'Shy',pt:'Tímido'},                    desc:{es:'Sufre la presión mediática.',en:'Struggles with media pressure.',pt:'Sofre com a pressão da mídia.'}},
+  rebelde:     {label:{es:'Rebelde',en:'Rebel',pt:'Rebelde'},                desc:{es:'Libre, pero difícil de dirigir.',en:'Free, but hard to manage.',pt:'Livre, mas difícil de comandar.'}},
+  profesional: {label:{es:'Profesional',en:'Professional',pt:'Profissional'},desc:{es:'Cuida su cuerpo y carrera.',en:'Takes care of body and career.',pt:'Cuida do corpo e da carreira.'}}
+};
+
+/* ---------- i18n ampliado ---------- */
+Object.assign(I18N.es,{ age:'Edad', year:'Año', your_origin:'Tu origen', youth_academy:'Pensión / Cantera',
+  context:'Contexto', psychology:'Psicología', personality:'Personalidad', ovr:'OVR', potential:'Potencial',
+  market_value:'Valor', position:'Posición', edit_identity:'Editar identidad', reroll_destiny:'Cambiar destino',
+  begin_story:'Comenzar mi historia', destiny_changed:'Destino renovado', season:'Temporada',
+  first_season_title:'Tu primer año en la pensión',
+  first_season_text:'Arrancás tu camino en {club}. Entrenás, competís y soñás con debutar. Cada decisión moldeará tu carrera.',
+  events_engine:'MOTOR DE EVENTOS', life_events:'Eventos de vida',
+  life_events_text:'Las decisiones narrativas (infancia, debut, conflictos) llegan en la ', part:'Parte',
+  need_surname:'Escribí un apellido.', need_nat:'Elegí tu nacionalidad.', need_pos:'Elegí tu posición en el campo.' });
+Object.assign(I18N.en,{ age:'Age', year:'Year', your_origin:'Your origin', youth_academy:'Youth academy',
+  context:'Context', psychology:'Psychology', personality:'Personality', ovr:'OVR', potential:'Potential',
+  market_value:'Value', position:'Position', edit_identity:'Edit identity', reroll_destiny:'Change destiny',
+  begin_story:'Begin my story', destiny_changed:'Destiny renewed', season:'Season',
+  first_season_title:'Your first year at the academy',
+  first_season_text:'You start your path at {club}. You train, compete and dream of your debut. Every decision will shape your career.',
+  events_engine:'EVENTS ENGINE', life_events:'Life events',
+  life_events_text:'Narrative decisions (childhood, debut, conflicts) arrive in ', part:'Part',
+  need_surname:'Enter a surname.', need_nat:'Choose your nationality.', need_pos:'Choose your position on the pitch.' });
+Object.assign(I18N.pt,{ age:'Idade', year:'Ano', your_origin:'Sua origem', youth_academy:'Base / Categoria de base',
+  context:'Contexto', psychology:'Psicologia', personality:'Personalidade', ovr:'OVR', potential:'Potencial',
+  market_value:'Valor', position:'Posição', edit_identity:'Editar identidade', reroll_destiny:'Mudar destino',
+  begin_story:'Começar minha história', destiny_changed:'Destino renovado', season:'Temporada',
+  first_season_title:'Seu primeiro ano na base',
+  first_season_text:'Você inicia seu caminho no {club}. Treina, compete e sonha com a estreia. Cada decisão moldará sua carreira.',
+  events_engine:'MOTOR DE EVENTOS', life_events:'Eventos de vida',
+  life_events_text:'As decisões narrativas (infância, estreia, conflitos) chegam na ', part:'Parte',
+  need_surname:'Digite um sobrenome.', need_nat:'Escolha sua nacionalidade.', need_pos:'Escolha sua posição em campo.' });
+
+const PSYCH_I18N = {
+  es:{confidence:'Confianza',motivation:'Motivación',resilience:'Resiliencia',happiness:'Felicidad',form:'Forma'},
+  en:{confidence:'Confidence',motivation:'Motivation',resilience:'Resilience',happiness:'Happiness',form:'Form'},
+  pt:{confidence:'Confiança',motivation:'Motivação',resilience:'Resiliência',happiness:'Felicidade',form:'Forma'}
+};
+const TAG_I18N = {
+  es:{diversion:'Diversión',progreso_rapido:'Progreso rápido',progreso_lento:'Progreso lento',presion:'Presión',
+      disciplina:'Disciplina',dinero:'Dinero',fama:'Fama',familia:'Familia',libertad:'Libertad',
+      riesgo_lesion:'Riesgo de lesión',roce:'Roce competitivo',estres:'Estrés'},
+  en:{diversion:'Fun',progreso_rapido:'Fast progress',progreso_lento:'Slow progress',presion:'Pressure',
+      disciplina:'Discipline',dinero:'Money',fama:'Fame',familia:'Family',libertad:'Freedom',
+      riesgo_lesion:'Injury risk',roce:'Competitive edge',estres:'Stress'},
+  pt:{diversion:'Diversão',progreso_rapido:'Progresso rápido',progreso_lento:'Progresso lento',presion:'Pressão',
+      disciplina:'Disciplina',dinero:'Dinheiro',fama:'Fama',familia:'Família',libertad:'Liberdade',
+      riesgo_lesion:'Risco de lesão',roce:'Roce competitivo',estres:'Estresse'}
+};
+
+/* ---------- helpers de datos ---------- */
+const originById = id => DATA.ORIGINS.find(o=>o.id===id);
+const leagueName = id => (DATA.LEAGUES.find(l=>l.id===id)||{}).name || id;
+const psychLabel = id => (PSYCH_I18N[App.state.lang]||PSYCH_I18N.es)[id] || id;
+const tagLabel   = id => (TAG_I18N[App.state.lang]||TAG_I18N.es)[id] || (DATA.TAGS[id]&&DATA.TAGS[id].label) || id;
+const traitLabel = id => DATA.PERSONALITY_TRAITS[id] ? DATA.PERSONALITY_TRAITS[id].label[App.state.lang] : id;
+const traitDesc  = id => DATA.PERSONALITY_TRAITS[id] ? DATA.PERSONALITY_TRAITS[id].desc[App.state.lang]  : '';
+
+/* ---------- FÓRMULAS INICIALES (la progresión por edad se amplía en Parte 3) ---------- */
+function rollOrigin(nationality){
+  const ctx = weightedPick(DATA.ORIGINS, o=>o.weight);
+  // liga según nacionalidad; si el país no tiene liga propia -> Argentina (liga base del juego)
+  let leagueId = (DATA.LEAGUES.find(l=>l.country===nationality)||{}).id || 'ARG';
+  // club del tier que sugiere el contexto (con fallbacks)
+  let pool = clubsOf(leagueId).filter(c=>c.tier===ctx.tier);
+  if(!pool.length) pool = clubsOf(leagueId).filter(c=>c.tier>=ctx.tier-1 && c.tier<=ctx.tier+1);
+  if(!pool.length) pool = clubsOf(leagueId);
+  return { contextId:ctx.id, clubId:pick(pool).id, leagueId };
+}
+function calcInitialOVR(position, club, origin){
+  const zone = (DATA.POSITIONS.find(p=>p.id===position)||{}).zone || 'MED';
+  const zoneMod = {GK:0, DEF:1, MED:0, ATT:1}[zone] || 0;
+  const clubMod = Math.round((club.ovr-70)/20);      // mejor formación inicial en clubes grandes (leve)
+  const base = CONFIG.OVR_START_BASE + zoneMod + (origin.ovrMod||0) + clubMod + randInt(-2,3);
+  return clamp(base, CONFIG.OVR_FLOOR, 60);          // un niño nunca supera ~60
+}
+function calcPotential(age, ovr, origin, traits){
+  let pot = ovr + randInt(18,34) + (origin.potentialMod||0);
+  if(traits.includes('ambicioso'))    pot += 4;
+  if(traits.includes('disciplinado')) pot += 3;
+  if(traits.includes('fiestero'))     pot -= 3;
+  return clamp(Math.round(pot), ovr+10, CONFIG.OVR_CAP);
+}
+function calcInitialValue(ovr, age){
+  const base = Math.pow(Math.max(ovr-30,1), 2.2) * 80;   // fórmula simplificada (la completa: Parte 3/8)
+  const ageFactor = age<16 ? 0.15 : 1;                   // un menor vale casi nada
+  return Math.round(base*ageFactor/1000)*1000;
+}
+function initPsych(origin){
+  const p={};
+  DATA.PSYCH.forEach(tr=>{
+    p[tr.id] = clamp(CONFIG.PSYCH_DEFAULT + randInt(-6,6) + ((origin.psych||{})[tr.id]||0), 5, 95);
+  });
+  return p;
+}
+function rollTraits(position){
+  const zone = (DATA.POSITIONS.find(p=>p.id===position)||{}).zone || 'MED';
+  const traits = new Set();
+  const archetype = {GK:'cerrojo', DEF:'muro', MED:'creativo', ATT:'goleador'}[zone];
+  if(archetype) traits.add(archetype);
+  const general = ['ambicioso','familiar','fiestero','disciplinado','lider','timido','rebelde','profesional'];
+  const target = 1 + randInt(1,2);
+  let guard=0;
+  while(traits.size < target && guard++<20) traits.add(pick(general));
+  return [...traits];
+}
+
+/* ---------- CREACIÓN DEL JUGADOR ---------- */
+function createPlayer(identity){
+  const origin   = rollOrigin(identity.nationality);
+  const originObj= originById(origin.contextId);
+  const club     = clubById(origin.clubId);
+  const traits   = rollTraits(identity.position);
+  const age      = CONFIG.AGE_START;
+  const ovr      = calcInitialOVR(identity.position, club, originObj);
+
+  App.state.player = {
+    // identidad
+    surname: identity.surname.trim(),
+    number: clamp(parseInt(identity.number)||10,1,99),
+    foot: identity.foot,
+    nationality: identity.nationality,
+    position: identity.position,
+    // tiempo
+    age, year: CONFIG.YEAR_START,
+    // atributos
+    ovr, potential: calcPotential(age, ovr, originObj, traits),
+    value: calcInitialValue(ovr, age), salary: 0,
+    psych: initPsych(originObj), traits,
+    reputation: randInt(0,5), energy: 100,
+    // origen
+    origin,
+    // carrera (lo usan Partes 3-10)
+    stats:{pj:0, goals:0, assists:0, cleanSheets:0, motm:0, yellows:0, reds:0, trophies:0},
+    history:[], trophies:[], awards:[],
+    contract:{clubId:club.id, yearsLeft:3, salary:0, role:'cantera'}
+  };
+  return App.state.player;
+}
+
+/* ---------- COMPONENTES DE RENDER reutilizables ---------- */
+function renderCareerHeader(p){
+  const club = clubById(p.contract.clubId);
+  return `<div class="career-header">
+    <div class="ch-left">
+      <span class="ch-name">${p.surname}</span>
+      <span class="ovr-badge">${p.ovr}</span>
+    </div>
+    <div class="ch-meta">
+      <div class="ch-item"><span class="ch-k">${t('age')}</span><span class="ch-v">${p.age}</span></div>
+      <div class="ch-item"><span class="ch-k">${t('year')}</span><span class="ch-v">${p.year}</span></div>
+    </div>
+    <div class="ch-club">${makeCrest(club.tag,club.c1,club.c2)}<span>${club.name}</span></div>
+  </div>`;
+}
+function renderPsychBars(psych){
+  return `<div class="psych-wrap">` + DATA.PSYCH.map(tr=>{
+    const v=psych[tr.id], cls = v<40?'low':v<65?'mid':'high';
+    return `<div class="psych-row">
+      <div class="psych-label"><span>${psychLabel(tr.id)}</span><span class="psych-val">${v}</span></div>
+      <div class="psych-track"><div class="psych-fill ${cls}" style="width:${v}%"></div></div>
+    </div>`;
+  }).join('') + `</div>`;
+}
+function renderTags(ids){
+  return ids.map(id=>{
+    const tg=DATA.TAGS[id]; if(!tg) return '';
+    return `<span class="ntag ${tg.type}">${tg.type==='good'?'✓':'✗'} ${tagLabel(id)}</span>`;
+  }).join('');
+}
+function statCard(label, value, kind){
+  return `<div class="stat-card ${kind}"><span class="sc-label">${label}</span><span class="sc-value">${value}</span></div>`;
+}
+
+/* ---------- PANTALLA: FICHA DEL JUGADOR ---------- */
+RENDERERS.player = function(){
+  const p = App.state.player;
+  if(!p){ App.go('identity'); return; }
+  const club   = clubById(p.origin.clubId);
+  const origin = originById(p.origin.contextId);
+
+  $('#screen-player').innerHTML = `
+    ${renderCareerHeader(p)}
+    <div class="player-grid">
+      <div class="origin-card">
+        <div class="origin-crest">${makeCrest(club.tag,club.c1,club.c2)}</div>
+        <div class="origin-info">
+          <span class="eyebrow">${t('your_origin')}</span>
+          <h3>${club.name}</h3>
+          <p class="muted">${leagueName(club.league)} · ${t('youth_academy')}</p>
+        </div>
+      </div>
+      <div class="context-card">
+        <span class="eyebrow">${t('context')}</span>
+        <h3>${origin.title[App.state.lang]}</h3>
+        <p class="muted">${origin.text[App.state.lang]}</p>
+        <div class="ntag-row">${renderTags(origin.tags)}</div>
+      </div>
+    </div>
+    <div class="player-grid">
+      <div class="panel-card">
+        <h4>${t('psychology')}</h4>
+        ${renderPsychBars(p.psych)}
+      </div>
+      <div class="panel-card">
+        <h4>${t('personality')}</h4>
+        <div class="trait-list">${p.traits.map(id=>`<div class="trait-chip"><b>${traitLabel(id)}</b><span>${traitDesc(id)}</span></div>`).join('')}</div>
+      </div>
+    </div>
+    <div class="stat-cards">
+      ${statCard(t('ovr'), p.ovr, 'ovr')}
+      ${statCard(t('potential'), p.potential, 'pot')}
+      ${statCard(t('market_value'), fmtMoney(p.value), 'val')}
+      ${statCard(t('position'), p.position, 'pos')}
+    </div>
+    <div class="player-actions">
+      <button class="btn btn-ghost" id="btn-edit-id">← ${t('edit_identity')}</button>
+      <button class="btn btn-ghost" id="btn-reroll">🎲 ${t('reroll_destiny')}</button>
+      <button class="btn btn-accent btn-lg" id="btn-begin">${t('begin_story')} →</button>
+    </div>`;
+
+  $('#btn-edit-id').onclick = ()=>App.go('identity');
+  $('#btn-reroll').onclick  = ()=>{ createPlayer(App.state.identity); RENDERERS.player(); App.toast('🎲 '+t('destiny_changed')); };
+  $('#btn-begin').onclick   = ()=>App.go('career');
+};
+
+/* ---------- PANTALLA: CARRERA (intro Temporada 1; los eventos llegan en Parte 4) ---------- */
+RENDERERS.career = function(){
+  const p = App.state.player;
+  if(!p){ App.go('identity'); return; }
+  const club = clubById(p.contract.clubId);
+  $('#screen-career').innerHTML = `
+    ${renderCareerHeader(p)}
+    <div class="season-intro">
+      <div class="season-num">1</div>
+      <div>
+        <span class="eyebrow">${t('season')} 1 · ${p.year}</span>
+        <h2>${t('first_season_title')}</h2>
+        <p class="muted">${t('first_season_text').replace('{club}', club.name)}</p>
+      </div>
+    </div>
+    <div class="ph-card" style="margin:30px auto">
+      <div class="ph-badge">⚽ ${t('events_engine')}</div>
+      <h2>${t('life_events')}</h2>
+      <p class="muted">${t('life_events_text')}<b style="color:var(--indigo-2)">${t('part')} 4</b>.</p>
+    </div>`;
+};
+
+/* ---------- INTEGRACIÓN con la Parte 1 ---------- */
+// 1) creamos la nueva pantalla en el DOM
+if(!$('#screen-player')){
+  const sec=document.createElement('section');
+  sec.id='screen-player'; sec.className='screen';
+  document.querySelector('main.container').appendChild(sec);
+}
+// 2) wrapper sobre RENDERERS.identity: reutiliza el render de Parte 1 y re-cablea "Confirmar"
+const _renderIdentityV1 = RENDERERS.identity;
+RENDERERS.identity = function(){
+  _renderIdentityV1();
+  const btn = $('#btn-id-confirm');
+  btn.style.opacity='1';
+  btn.onclick = ()=>{
+    const I = App.state.identity;
+    if(!I.surname.trim()){ App.toast('⚠ '+t('need_surname')); return; }
+    if(!I.nationality)   { App.toast('⚠ '+t('need_nat'));     return; }
+    if(!I.position)      { App.toast('⚠ '+t('need_pos'));     return; }
+    createPlayer(I);
+    App.go('player');
+  };
+};
+
+/* ---------- CSS del módulo (inyectado) ---------- */
+injectCSS('css-part2', `
+.career-header{display:flex;align-items:center;gap:22px;background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:14px 22px;margin:24px 0;position:sticky;top:74px;z-index:40;box-shadow:var(--shadow)}
+.ch-left{display:flex;align-items:center;gap:12px}
+.ch-name{font-size:22px;font-weight:900;letter-spacing:-.02em}
+.ovr-badge{background:var(--grad-ovr);color:#fff;font-weight:900;font-size:18px;min-width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;border-radius:10px;box-shadow:0 6px 18px -6px rgba(217,70,239,.7)}
+.ch-meta{display:flex;gap:26px;margin-left:8px}
+.ch-item{display:flex;flex-direction:column;line-height:1.1}
+.ch-k{font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--muted-2);text-transform:uppercase}
+.ch-v{font-size:20px;font-weight:800;color:var(--indigo-2)}
+.ch-club{margin-left:auto;display:flex;align-items:center;gap:10px;font-weight:700}
+.ch-club svg{width:34px;height:39px}
+.player-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:22px;margin-bottom:22px}
+.origin-card{display:flex;align-items:center;gap:18px;background:var(--panel);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px}
+.origin-crest svg{width:74px;height:85px}
+.origin-info h3{font-size:22px;font-weight:900;margin:6px 0 4px}
+.context-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px}
+.context-card h3{font-size:20px;font-weight:800;margin:8px 0}
+.context-card p{line-height:1.6;margin-bottom:14px}
+.ntag-row{display:flex;flex-wrap:wrap;gap:8px}
+.ntag{font-size:12px;font-weight:700;padding:5px 11px;border-radius:var(--r-pill)}
+.ntag.good{background:rgba(74,222,128,.14);color:var(--good)}
+.ntag.bad{background:rgba(248,113,113,.14);color:var(--bad)}
+.panel-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px}
+.panel-card h4{font-size:15px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.psych-row{margin-bottom:14px}
+.psych-label{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px}
+.psych-val{color:var(--muted)}
+.psych-track{height:9px;background:var(--panel-3);border-radius:var(--r-pill);overflow:hidden}
+.psych-fill{height:100%;border-radius:var(--r-pill);transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.psych-fill.low{background:linear-gradient(90deg,#ef4444,#f87171)}
+.psych-fill.mid{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.psych-fill.high{background:linear-gradient(90deg,#22c55e,#4ade80)}
+.trait-list{display:flex;flex-direction:column;gap:12px}
+.trait-chip{background:var(--panel-2);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 14px}
+.trait-chip b{display:block;font-size:14px;margin-bottom:3px;color:var(--indigo-2)}
+.trait-chip span{font-size:13px;color:var(--muted)}
+.stat-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:6px 0 26px}
+.stat-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;text-align:center}
+.sc-label{display:block;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px}
+.sc-value{font-size:30px;font-weight:900;letter-spacing:-.02em}
+.stat-card.ovr .sc-value{color:#f472b6}
+.stat-card.pot .sc-value{color:var(--indigo-2)}
+.stat-card.val .sc-value{color:var(--good)}
+.player-actions{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;padding-bottom:60px}
+.season-intro{display:flex;align-items:center;gap:24px;background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(224,72,155,.08));
+  border:1px solid var(--border);border-radius:var(--r-lg);padding:28px}
+.season-num{font-size:70px;font-weight:900;color:var(--indigo);line-height:1;opacity:.9}
+.season-intro h2{font-size:26px;font-weight:900;margin:6px 0}
+.season-intro p{line-height:1.6;max-width:640px}
+@media(max-width:820px){.player-grid{grid-template-columns:1fr}.stat-cards{grid-template-columns:1fr 1fr}
+  .career-header{flex-wrap:wrap}.ch-club{margin-left:0}}
+`);
+
+// === FIN PARTE 2 === //
+// Las PARTES 3..10 se pegan a continuación, en este mismo <script>.
+    // ============================================================
+// SIMULADOR DE CARRERA — PARTE 3 / 10
+// Motor matemático: atributos, OVR, progresión, valor, salarios,
+// psicología con efectos, energía, lesiones.
+// Pegar donde dice:  // === FIN PARTE 2 === //
+// ============================================================
+
+/* ---------- DEFINICIONES ---------- */
+const ATTR_DEFS = [
+  {id:'pac', es:'Ritmo',   en:'Pace',      pt:'Ritmo'},
+  {id:'sho', es:'Tiro',    en:'Shooting',  pt:'Chute'},
+  {id:'pas', es:'Pase',    en:'Passing',   pt:'Passe'},
+  {id:'dri', es:'Regate',  en:'Dribbling', pt:'Drible'},
+  {id:'def', es:'Defensa', en:'Defending', pt:'Defesa'},
+  {id:'phy', es:'Físico',  en:'Physical',  pt:'Físico'}
+];
+// Pesos por zona para calcular el OVR (cada fila suma 1.0)
+const OVR_WEIGHTS = {
+  GK:  {pac:.06, sho:.02, pas:.10, dri:.06, def:.40, phy:.36},   // def = reflejos/atajadas
+  DEF: {pac:.16, sho:.05, pas:.13, dri:.10, def:.36, phy:.20},
+  MED: {pac:.14, sho:.14, pas:.26, dri:.22, def:.12, phy:.12},
+  ATT: {pac:.22, sho:.28, pas:.14, dri:.24, def:.04, phy:.08}
+};
+// Sesgos de atributos por zona (para generar la distribución)
+const ATTR_POS_BIAS = {
+  GK:  {pac:-4, sho:-14, pas:-2, dri:-6,  def:10,  phy:8},
+  DEF: {pac:2,  sho:-8,  pas:0,  dri:-2,  def:8,   phy:4},
+  MED: {pac:2,  sho:2,   pas:7,  dri:5,   def:-2,  phy:-2},
+  ATT: {pac:6,  sho:8,   pas:0,  dri:6,   def:-12, phy:-2}
+};
+// Sesgos por rasgo de personalidad
+const ATTR_TRAIT_BIAS = {
+  goleador:{sho:6,pac:2}, creativo:{pas:6,dri:4}, muro:{def:6,phy:3}, cerrojo:{def:6,phy:4},
+  disciplinado:{phy:4,def:2}, profesional:{phy:3,pas:2}, ambicioso:{sho:2,pac:2},
+  fiestero:{pac:3,phy:-3}, lider:{pas:3,def:2}, rebelde:{dri:3,def:-2}, familiar:{}, timido:{}
+};
+
+/* ---------- helpers ---------- */
+const posZone   = pos => (DATA.POSITIONS.find(p=>p.id===pos)||{}).zone || 'MED';
+const attrLabel = id  => { const a=ATTR_DEFS.find(x=>x.id===id); return a ? a[App.state.lang] : id; };
+const attrColor = v   => v>=70 ? '#4ade80' : v>=55 ? '#fbbf24' : v>=45 ? '#fb923c' : '#f87171';
+
+/* ---------- OVR por atributos ---------- */
+function calcOVR(attrs, position){
+  const W = OVR_WEIGHTS[posZone(position)];
+  let sum=0; for(const k in W) sum += attrs[k]*W[k];
+  return clamp(Math.round(sum), CONFIG.OVR_FLOOR, CONFIG.OVR_CAP);
+}
+// Genera 6 atributos cuyo OVR ponderado ≈ ovrTarget, sesgados por posición y rasgos
+function buildAttrs(ovrTarget, position, traits){
+  const zone = posZone(position);
+  const posB = ATTR_POS_BIAS[zone];
+  const trB  = {pac:0,sho:0,pas:0,dri:0,def:0,phy:0};
+  (traits||[]).forEach(tid=>{ const b=ATTR_TRAIT_BIAS[tid]; if(b) for(const k in b) trB[k]+=b[k]; });
+  const attrs={};
+  ATTR_DEFS.forEach(a=>{ attrs[a.id]=clamp(Math.round(ovrTarget+posB[a.id]+trB[a.id]+randInt(-4,4)),20,92); });
+  const diff = ovrTarget - calcOVR(attrs, position);           // normaliza al OVR objetivo
+  ATTR_DEFS.forEach(a=>{ attrs[a.id]=clamp(attrs[a.id]+diff,20,95); });
+  return attrs;
+}
+
+/* ---------- PSICOLOGÍA con efectos reales ---------- */
+function progressMult(psych, traits){
+  let m = 0.55 + (psych.motivation/100)*0.55 + (psych.form/100)*0.15 + (psych.happiness/100)*0.10;
+  if(traits.includes('disciplinado')) m+=0.15;
+  if(traits.includes('profesional'))  m+=0.12;
+  if(traits.includes('ambicioso'))    m+=0.10;
+  if(traits.includes('fiestero'))     m-=0.12;
+  return clamp(m, 0.3, 1.6);
+}
+function adjustPsych(p, deltas){ for(const k in deltas) if(p.psych[k]!=null) p.psych[k]=clamp(p.psych[k]+deltas[k],0,100); }
+function psychModifier(p){
+  const avg = (p.psych.confidence + p.psych.form + p.psych.happiness)/3;
+  return {
+    performance: 0.75 + (avg/100)*0.5,                                   // 0.75 – 1.25
+    progress:    progressMult(p.psych, p.traits),
+    negotiate:   0.80 + (p.psych.confidence/100)*0.4,
+    injuryRisk:  clamp(0.02 + (100-p.psych.happiness)/100*0.06
+                          + (100-p.energy)/100*0.08
+                          + (100-p.psych.form)/100*0.03, 0.01, 0.35)
+  };
+}
+function psychDecayTowardsMean(p){
+  DATA.PSYCH.forEach(tr=>{
+    if(tr.id==='form') return;
+    const d=(CONFIG.PSYCH_DEFAULT - p.psych[tr.id])*0.15;
+    p.psych[tr.id]=clamp(Math.round(p.psych[tr.id]+d),0,100);
+  });
+}
+function moraleKey(p){
+  const ps=p.psych, avg=(ps.confidence+ps.motivation+ps.resilience+ps.happiness+ps.form)/5;
+  return avg>=75?'fire': avg>=62?'stable': avg>=48?'mid': avg>=32?'low':'crisis';
+}
+const moraleLabel = p => t('morale_'+moraleKey(p));
+const MORALE_COLOR = {fire:'#4ade80', stable:'#818cf8', mid:'#fbbf24', low:'#fb923c', crisis:'#f87171'};
+
+/* ---------- PROGRESIÓN POR EDAD ---------- */
+function attrYearDelta(p, attrId, zone, pMult){
+  const age=p.age, headroom=Math.max(p.potential-p.ovr,0);
+  const physical = (attrId==='pac'||attrId==='phy');
+  let delta;
+  if(age > CONFIG.DECLINE_START_AGE){                       // declive
+    if(physical) delta = -randInt(1,3);
+    else if(attrId==='pas'||attrId==='def') delta = randInt(-1,1);   // la experiencia aguanta
+    else delta = randInt(-2,0);
+  } else {                                                  // crecimiento
+    const ageF = age<=17?1.15 : age<=21?1.0 : age<=24?0.8 : age<=27?0.55 : age<=30?0.25 : 0.08;
+    const w = OVR_WEIGHTS[zone][attrId]||0.1;
+    const posGrow = 1 + (w-0.12)*1.5;                        // attrs clave de la posición crecen más
+    delta = headroom*0.14*ageF*pMult*posGrow + rand(-0.8,0.8);
+  }
+  return clamp(Math.round(delta), -4, 6);
+}
+function progressOneYear(p){
+  p.age+=1; p.year+=1;
+  const zone=posZone(p.position), pMult=progressMult(p.psych,p.traits);
+  ATTR_DEFS.forEach(a=>{ p.attrs[a.id]=clamp(p.attrs[a.id]+attrYearDelta(p,a.id,zone,pMult), CONFIG.OVR_FLOOR-5, 99); });
+  p.ovr = calcOVR(p.attrs, p.position);
+  if(p.ovr > p.potential-2) p.potential = clamp(p.potential+randInt(0,2), p.ovr+2, CONFIG.OVR_CAP);
+  psychDecayTowardsMean(p);
+  p.psych.form = clamp(p.psych.form + randInt(-12,12), 5, 99);
+  p.energy = clamp(p.energy + 40, 0, 100);                   // pretemporada
+  p.value  = calcMarketValue(p);
+  p.salary = calcSalary(p, clubById(p.contract.clubId));
+  p.contract.salary = p.salary;
+  return p;
+}
+function applyTraining(p, attrId, intensity){
+  intensity=intensity||1;
+  const gain=clamp(Math.round((1+Math.max(p.potential-p.ovr,0)*0.05)*intensity*progressMult(p.psych,p.traits)),0,4);
+  p.attrs[attrId]=clamp(p.attrs[attrId]+gain,20,99);
+  p.ovr=calcOVR(p.attrs,p.position);
+  p.energy=clamp(p.energy-8*intensity,0,100);
+  return gain;
+}
+
+/* ---------- ECONOMÍA: valor de mercado y salario ---------- */
+function calcMarketValue(p){
+  const ovr=p.ovr, age=p.age;
+  const base = Math.pow(Math.max(ovr-45,1), 2.8) * 1500;
+  const ageM = age<=15?0.35 : age<=18?0.55 : age<=21?0.85 : age<=24?1.05 : age<=28?1.2
+             : age<=30?0.95 : age<=32?0.6 : age<=34?0.35 : 0.18;
+  const posM = {ATT:1.25, MED:1.1, DEF:0.85, GK:0.8}[posZone(p.position)]||1;
+  const potBonus = age>=16 && age<=23 ? Math.pow(Math.max(p.potential-ovr,0),1.7)*120 : 0;
+  const repM  = 1 + (p.reputation||0)/180;
+  const formM = 0.85 + (p.psych.form/100)*0.3;
+  return Math.max(0, Math.round((base*ageM*posM*repM*formM + potBonus)/1000)*1000);
+}
+function calcSalary(p, club){
+  if(p.age<16) return 0;                                     // beca de cantera
+  const base = Math.pow(Math.max(p.ovr-45,1), 2.3) * 800;    // anual base
+  const leagueM = {ENG:1.7, ESP:1.45, ITA:1.25, GER:1.25, FRA:1.05, BRA:0.6, ARG:0.45}[(club||{}).league]||0.5;
+  const tierM = club ? (club.tier===1?1 : club.tier===2?0.5 : 0.25) : 0.4;
+  const ageM = p.age<=20?0.6 : p.age<=28?1 : p.age<=32?0.85 : 0.5;
+  return Math.max(0, Math.round((base*leagueM*tierM*ageM)/1000)*1000);
+}
+
+/* ---------- ENERGÍA, LESIONES, RENDIMIENTO, RETIRO ---------- */
+const fatigue = (p,a)=> p.energy = clamp(p.energy-a,0,100);
+const rest    = (p,a)=> p.energy = clamp(p.energy+a,0,100);
+function rollInjury(p, baseRisk){
+  const risk = clamp((baseRisk||0) + psychModifier(p).injuryRisk
+                   + (p.age>32?0.04:0) + (p.traits.includes('fiestero')?0.02:0), 0.01, 0.5);
+  if(Math.random()<risk) return {injured:true, weeks:randInt(1, p.energy<30?10:5), risk};
+  return {injured:false, weeks:0, risk};
+}
+function matchRatingBase(p){ return p.ovr * psychModifier(p).performance * (0.7 + p.energy/100*0.3); }
+function shouldRetire(p){
+  return p.age>=CONFIG.AGE_RETIRE_MAX || (p.age>34 && p.ovr<55) || (p.age>30 && p.ovr<=CONFIG.OVR_FLOOR+2);
+}
+
+/* ---------- COMPONENTES VISUALES ---------- */
+function renderRadar(attrs){
+  const cx=110, cy=110, R=80, order=['pac','sho','pas','dri','def','phy'];
+  const pt=(i,f)=>{ const a=(-90+i*60)*Math.PI/180; return [cx+Math.cos(a)*R*f, cy+Math.sin(a)*R*f]; };
+  let rings='';
+  [0.25,0.5,0.75,1].forEach(f=>{
+    rings+=`<polygon points="${order.map((_,i)=>pt(i,f).map(n=>n.toFixed(1)).join(',')).join(' ')}" fill="none" stroke="rgba(255,255,255,.10)"/>`;
+  });
+  let axes='', labels='', dots='';
+  order.forEach((id,i)=>{
+    const [x,y]=pt(i,1);
+    axes+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(255,255,255,.10)"/>`;
+    const [lx,ly]=pt(i,1.2);
+    labels+=`<text x="${lx.toFixed(1)}" y="${(ly+3).toFixed(1)}" text-anchor="middle" font-size="10" font-weight="800" fill="#9a9aa6">${attrLabel(id).toUpperCase()}</text>`;
+    const [dx,dy]=pt(i, attrs[id]/99);
+    dots+=`<circle cx="${dx.toFixed(1)}" cy="${dy.toFixed(1)}" r="3" fill="#f472b6"/>`;
+  });
+  const valPts=order.map((id,i)=>pt(i, clamp(attrs[id],0,99)/99).map(n=>n.toFixed(1)).join(',')).join(' ');
+  return `<svg viewBox="0 0 220 220" width="210" height="210" class="radar">
+    ${rings}${axes}
+    <polygon points="${valPts}" fill="rgba(224,72,155,.28)" stroke="#e0489b" stroke-width="2"/>
+    ${dots}${labels}</svg>`;
+}
+function renderAttrsGrid(attrs){
+  return `<div class="attr-grid">`+ATTR_DEFS.map(a=>`
+    <div class="attr-cell"><span class="ak">${attrLabel(a.id).toUpperCase()}</span>
+    <span class="av" style="color:${attrColor(attrs[a.id])}">${attrs[a.id]}</span></div>`).join('')+`</div>`;
+}
+function moraleChip(p){
+  const c=MORALE_COLOR[moraleKey(p)];
+  return `<span class="morale-chip" style="background:${c}22;color:${c};box-shadow:inset 0 0 0 1px ${c}55">● ${moraleLabel(p)}</span>`;
+}
+function energyBar(p){
+  const v=p.energy, cls=v<35?'low':v<65?'mid':'high';
+  return `<div class="energy-row"><div class="psych-label"><span>${t('energy')}</span><span class="psych-val">${v}</span></div>
+    <div class="psych-track"><div class="psych-fill ${cls}" style="width:${v}%"></div></div></div>`;
+}
+
+/* ---------- i18n ampliado ---------- */
+Object.assign(I18N.es,{ attributes:'Atributos', salary:'Salario', salary_year:'/año', morale:'Estado anímico',
+  energy:'Energía', sim_year:'Simular 1 año', technical:'Ficha técnica',
+  morale_fire:'En racha', morale_stable:'Estable', morale_mid:'Irregular', morale_low:'Tocado', morale_crisis:'En crisis' });
+Object.assign(I18N.en,{ attributes:'Attributes', salary:'Salary', salary_year:'/yr', morale:'Mood',
+  energy:'Energy', sim_year:'Simulate 1 year', technical:'Player card',
+  morale_fire:'On fire', morale_stable:'Stable', morale_mid:'Inconsistent', morale_low:'Struggling', morale_crisis:'In crisis' });
+Object.assign(I18N.pt,{ attributes:'Atributos', salary:'Salário', salary_year:'/ano', morale:'Estado anímico',
+  energy:'Energia', sim_year:'Simular 1 ano', technical:'Ficha técnica',
+  morale_fire:'Em grande fase', morale_stable:'Estável', morale_mid:'Irregular', morale_low:'Abalado', morale_crisis:'Em crise' });
+
+/* ---------- INTEGRACIÓN: createPlayer ahora genera atributos y recalcula ---------- */
+const _createPlayerV2 = createPlayer;
+createPlayer = function(identity){
+  const p = _createPlayerV2(identity);
+  p.attrs    = buildAttrs(p.ovr, p.position, p.traits);
+  p.ovr      = calcOVR(p.attrs, p.position);
+  p.potential= clamp(Math.max(p.potential, p.ovr+10), p.ovr+10, CONFIG.OVR_CAP);
+  p.value    = calcMarketValue(p);
+  p.salary   = calcSalary(p, clubById(p.contract.clubId));
+  p.contract.salary = p.salary;
+  p.energy   = 100;
+  return p;
+};
+
+/* ---------- FICHA DEL JUGADOR v3 (radar + salario + ánimo + energía) ---------- */
+RENDERERS.player = function(){
+  const p = App.state.player;
+  if(!p){ App.go('identity'); return; }
+  const club   = clubById(p.origin.clubId);
+  const origin = originById(p.origin.contextId);
+
+  $('#screen-player').innerHTML = `
+    ${renderCareerHeader(p)}
+    <div class="player-grid">
+      <div class="origin-card">
+        <div class="origin-crest">${makeCrest(club.tag,club.c1,club.c2)}</div>
+        <div class="origin-info">
+          <span class="eyebrow">${t('your_origin')}</span>
+          <h3>${club.name}</h3>
+          <p class="muted">${leagueName(club.league)} · ${t('youth_academy')}</p>
+        </div>
+      </div>
+      <div class="context-card">
+        <span class="eyebrow">${t('context')}</span>
+        <h3>${origin.title[App.state.lang]}</h3>
+        <p class="muted">${origin.text[App.state.lang]}</p>
+        <div class="ntag-row">${renderTags(origin.tags)}</div>
+      </div>
+    </div>
+
+    <div class="player-grid">
+      <div class="panel-card">
+        <h4>${t('attributes')} · ${t('ovr')} ${p.ovr}</h4>
+        <div class="attr-panel">${renderRadar(p.attrs)}${renderAttrsGrid(p.attrs)}</div>
+      </div>
+      <div class="panel-card">
+        <h4>${t('psychology')}</h4>
+        ${moraleChip(p)}
+        ${renderPsychBars(p.psych)}
+        ${energyBar(p)}
+      </div>
+    </div>
+
+    <div class="player-grid">
+      <div class="panel-card">
+        <h4>${t('personality')}</h4>
+        <div class="trait-list">${p.traits.map(id=>`<div class="trait-chip"><b>${traitLabel(id)}</b><span>${traitDesc(id)}</span></div>`).join('')}</div>
+      </div>
+      <div class="panel-card">
+        <h4>${t('technical')}</h4>
+        <div class="attr-grid">
+          <div class="attr-cell"><span class="ak">${t('potential')}</span><span class="av" style="color:var(--indigo-2)">${p.potential}</span></div>
+          <div class="attr-cell"><span class="ak">${t('market_value')}</span><span class="av" style="color:var(--good)">${fmtMoney(p.value)}</span></div>
+          <div class="attr-cell"><span class="ak">${t('salary')}</span><span class="av" style="color:var(--gold-2)">${p.salary?fmtMoney(p.salary)+t('salary_year'):'—'}</span></div>
+          <div class="attr-cell"><span class="ak">${t('position')}</span><span class="av">${p.position}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="player-actions">
+      <button class="btn btn-ghost" id="btn-edit-id">← ${t('edit_identity')}</button>
+      <button class="btn btn-ghost" id="btn-reroll">🎲 ${t('reroll_destiny')}</button>
+      <button class="btn btn-ghost" id="btn-sim">⏩ ${t('sim_year')}</button>
+      <button class="btn btn-accent btn-lg" id="btn-begin">${t('begin_story')} →</button>
+    </div>`;
+
+  $('#btn-edit-id').onclick = ()=>App.go('identity');
+  $('#btn-reroll').onclick  = ()=>{ createPlayer(App.state.identity); RENDERERS.player(); App.toast('🎲 '+t('destiny_changed')); };
+  $('#btn-sim').onclick     = ()=>{
+    const before=p.ovr, bAge=p.age; progressOneYear(p); RENDERERS.player();
+    App.toast(`⏩ ${p.year} · ${bAge}→${p.age} ${t('age').toLowerCase()} · OVR ${before}→${p.ovr} · ${fmtMoney(p.value)}`);
+  };
+  $('#btn-begin').onclick   = ()=>App.go('career');
+};
+
+/* ---------- CSS del módulo ---------- */
+injectCSS('css-part3', `
+.attr-panel{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.radar{flex:none}
+.attr-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;flex:1;min-width:190px}
+.attr-cell{display:flex;justify-content:space-between;align-items:center;background:var(--panel-2);
+  border:1px solid var(--border);border-radius:var(--r-sm);padding:9px 12px}
+.attr-cell .ak{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--muted)}
+.attr-cell .av{font-size:18px;font-weight:900}
+.morale-chip{display:inline-flex;align-items:center;gap:7px;font-weight:800;font-size:13px;
+  padding:7px 14px;border-radius:var(--r-pill);margin-bottom:16px}
+.energy-row{margin-top:16px}
+`);
+
+// === FIN PARTE 3 === //
+// Las PARTES 4..10 se pegan a continuación, en este mismo <script>.
