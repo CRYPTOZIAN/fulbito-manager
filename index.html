@@ -703,3 +703,273 @@ function phScreen(icon,title,desc,part){
 App.init();
 
 /* >>>> PEGAR PARTE 2 AQUÍ (dentro de este mismo <script>, NO cierres nada). Luego 3..9 igual. La PARTE 10 cierra con </script></body></html> <<<< */
+// ============================================================
+// PARTE 2 / 10  ·  Identidad -> Jugador
+// Pega DENTRO del <script> de la Parte 1 (en el marcador).
+// NO cierra el script. NO redefine $, clamp, makeCrest, injectCSS,
+// Bus, t, DATA, App, RENDERERS (ya existen en la Parte 1).
+// ============================================================
+
+/* ---------- i18n extra de esta parte ---------- */
+Object.assign(I18N.es,{ your_origin:'Tu origen', youth_academy:'Pensión / Cantera', context:'Contexto',
+  edit_identity:'Editar identidad', reroll_destiny:'Cambiar destino', begin_story:'Comenzar mi historia',
+  destiny_changed:'Destino renovado', season:'Temporada', position:'Posición',
+  first_season_title:'Tu primer año en la pensión',
+  first_season_text:'Arrancás tu camino en {club}. Entrenás, competís y soñás con debutar. Cada decisión moldeará tu carrera.',
+  events_engine:'MOTOR DE EVENTOS', life_events:'Eventos de vida',
+  life_events_text:'Las decisiones narrativas (infancia, debut, conflictos) llegan en la ' });
+Object.assign(I18N.en,{ your_origin:'Your origin', youth_academy:'Youth academy', context:'Context',
+  edit_identity:'Edit identity', reroll_destiny:'Change destiny', begin_story:'Begin my story',
+  destiny_changed:'Destiny renewed', season:'Season', position:'Position',
+  first_season_title:'Your first year at the academy',
+  first_season_text:'You start your path at {club}. You train, compete and dream of your debut. Every decision will shape your career.',
+  events_engine:'EVENTS ENGINE', life_events:'Life events',
+  life_events_text:'Narrative decisions (childhood, debut, conflicts) arrive in ' });
+Object.assign(I18N.pt,{ your_origin:'Sua origem', youth_academy:'Base / Categoria de base', context:'Contexto',
+  edit_identity:'Editar identidade', reroll_destiny:'Mudar destino', begin_story:'Começar minha história',
+  destiny_changed:'Destino renovado', season:'Temporada', position:'Posição',
+  first_season_title:'Seu primeiro ano na base',
+  first_season_text:'Você inicia seu caminho no {club}. Treina, compete e sonha com a estreia. Cada decisão moldará sua carreira.',
+  events_engine:'MOTOR DE EVENTOS', life_events:'Eventos de vida',
+  life_events_text:'As decisões narrativas (infância, estreia, conflitos) chegam na ' });
+
+/* ---------- utilidades nuevas de esta parte ---------- */
+function weightedPick(arr, wfn){
+  const total=arr.reduce((s,x)=>s+wfn(x),0); let r=Math.random()*total;
+  for(const x of arr){ r-=wfn(x); if(r<=0) return x; }
+  return arr[arr.length-1];
+}
+const originById = id => DATA.ORIGINS.find(o=>o.id===id);
+// Reemplaza {club} {pos} {num} {surname} {age} {year} (lo reusa la Parte 4 tal cual)
+function fill(str,p){
+  if(!str) return '';
+  const c=clubById(p.contract&&p.contract.clubId);
+  return String(str).replace(/\{club\}/g,c?c.name:'—').replace(/\{pos\}/g,p.position)
+    .replace(/\{num\}/g,p.number).replace(/\{surname\}/g,p.surname)
+    .replace(/\{age\}/g,p.age).replace(/\{year\}/g,p.year);
+}
+
+/* ---------- DATA: contextos de origen ---------- */
+DATA.ORIGINS = [
+  {id:'barrio',weight:28,tier:3,ovrMod:-1,potentialMod:3,
+   title:{es:'Criado en el barrio',en:'Raised in the neighborhood',pt:'Criado no bairro'},
+   text:{es:'Creciste jugando al fútbol en la calle, entre amigos y picados interminables.',
+         en:'You grew up playing street football with friends and endless pickup games.',
+         pt:'Você cresceu jogando futebol de rua com amigos e rachas intermináveis.'},
+   psych:{resilience:8,happiness:6,confidence:-2},tags:['familia','libertad','progreso_lento']},
+  {id:'cantera',weight:24,tier:1,ovrMod:2,potentialMod:5,
+   title:{es:'Cantera desde chico',en:'Academy kid',pt:'Base desde cedo'},
+   text:{es:'Entraste muy joven a la pensión de un club grande: disciplina y competencia diaria.',
+         en:'You joined a big club academy very young: discipline and daily competition.',
+         pt:'Entrou muito jovem na base de um clube grande: disciplina e competição diária.'},
+   psych:{motivation:6,confidence:4,happiness:-3},tags:['disciplina','progreso_rapido','presion']},
+  {id:'familia_deportista',weight:18,tier:2,ovrMod:1,potentialMod:4,
+   title:{es:'Familia de deportistas',en:'Sporting family',pt:'Família de esportistas'},
+   text:{es:'En tu casa el deporte era ley. Creciste con hábitos sanos y mentalidad competitiva.',
+         en:'Sport was law at home. You grew up with healthy habits and a competitive mindset.',
+         pt:'Em casa o esporte era lei. Cresceu com hábitos saudáveis e mentalidade competitiva.'},
+   psych:{motivation:7,confidence:3,form:4},tags:['disciplina','familia','roce']},
+  {id:'humilde',weight:22,tier:3,ovrMod:0,potentialMod:3,
+   title:{es:'Familia trabajadora',en:'Working-class family',pt:'Família trabalhadora'},
+   text:{es:'A tu familia le costaba llegar a fin de mes. El fútbol era tu salida y tu sueño.',
+         en:'Your family struggled to make ends meet. Football was your way out and your dream.',
+         pt:'Sua família tinha dificuldades. O futebol era sua saída e seu sonho.'},
+   psych:{resilience:9,motivation:6,happiness:-2},tags:['familia','presion','progreso_rapido']},
+  {id:'acomodado',weight:8,tier:1,ovrMod:1,potentialMod:1,
+   title:{es:'Familia acomodada',en:'Well-off family',pt:'Família abastada'},
+   text:{es:'Nunca te faltó nada. Pudiste elegir clubes y formarte sin presión económica.',
+         en:'You never lacked anything. You could choose clubs and develop without financial pressure.',
+         pt:'Nunca te faltou nada. Pôde escolher clubes e se formar sem pressão financeira.'},
+   psych:{confidence:7,happiness:5,resilience:-5},tags:['dinero','libertad','progreso_lento']}
+];
+
+/* ---------- fórmulas iniciales (la progresión por edad la amplía la Parte 3) ---------- */
+function rollOrigin(nationality){
+  const ctx=weightedPick(DATA.ORIGINS,o=>o.weight);
+  const leagueId=(DATA.LEAGUES.find(l=>l.country===nationality)||{}).id||'ARG';
+  let pool=clubsOf(leagueId).filter(c=>c.tier===ctx.tier);
+  if(!pool.length) pool=clubsOf(leagueId).filter(c=>c.tier>=ctx.tier-1&&c.tier<=ctx.tier+1);
+  if(!pool.length) pool=clubsOf(leagueId);
+  return {contextId:ctx.id, clubId:pick(pool).id, leagueId};
+}
+function calcInitialOVR(position,club,origin){
+  const zone=posZone(position);
+  const zoneMod={GK:0,DEF:1,MED:0,ATT:1}[zone]||0;
+  const clubMod=Math.round((club.ovr-70)/20);
+  const base=CONFIG.OVR_START_BASE+zoneMod+(origin.ovrMod||0)+clubMod+randInt(-2,3);
+  return clamp(base,CONFIG.OVR_FLOOR,60);
+}
+function calcPotential(age,ovr,origin,traits){
+  let pot=ovr+randInt(18,34)+(origin.potentialMod||0);
+  if(traits.includes('ambicioso')) pot+=4;
+  if(traits.includes('disciplinado')) pot+=3;
+  if(traits.includes('fiestero')) pot-=3;
+  return clamp(Math.round(pot),ovr+10,CONFIG.OVR_CAP);
+}
+function calcInitialValue(ovr,age){
+  const base=Math.pow(Math.max(ovr-30,1),2.2)*80;
+  const ageFactor=age<16?0.15:1;
+  return Math.round(base*ageFactor/1000)*1000;
+}
+function initPsych(origin){
+  const p={};
+  DATA.PSYCH.forEach(tr=>{ p[tr.id]=clamp(CONFIG.PSYCH_DEFAULT+randInt(-6,6)+((origin.psych||{})[tr.id]||0),5,95); });
+  return p;
+}
+function rollTraits(position){
+  const zone=posZone(position); const traits=new Set();
+  const archetype={GK:'cerrojo',DEF:'muro',MED:'creativo',ATT:'goleador'}[zone];
+  if(archetype) traits.add(archetype);
+  const general=['ambicioso','familiar','fiestero','disciplinado','lider','timido','rebelde','profesional'];
+  const target=1+randInt(1,2); let guard=0;
+  while(traits.size<target&&guard++<20) traits.add(pick(general));
+  return [...traits];
+}
+
+/* ---------- creación del jugador ---------- */
+function createPlayer(identity){
+  const origin=rollOrigin(identity.nationality);
+  const originObj=originById(origin.contextId);
+  const club=clubById(origin.clubId);
+  const traits=rollTraits(identity.position);
+  const age=CONFIG.AGE_START;
+  const ovr=calcInitialOVR(identity.position,club,originObj);
+  const p={
+    surname:identity.surname.trim(),
+    number:clamp(parseInt(identity.number)||10,1,99),
+    foot:identity.foot, nationality:identity.nationality, position:identity.position,
+    age, year:CONFIG.YEAR_START,
+    ovr, potential:calcPotential(age,ovr,originObj,traits),
+    value:calcInitialValue(ovr,age), salary:0,
+    psych:initPsych(originObj), traits,
+    reputation:randInt(0,5), energy:100, pressRelation:50,
+    origin,
+    stats:{pj:0,goals:0,assists:0,cleanSheets:0,motm:0,yellows:0,reds:0,trophies:0},
+    history:[], trophies:[], awards:[], flags:{}, seen:[], months:0, injuryWeeks:0, season:1,
+    contract:{clubId:club.id,yearsLeft:3,salary:0,role:'cantera'}
+  };
+  App.state.player=p;
+  Bus.emit('playerCreated',p);   // Parte 3 agrega attrs; Parte 8 agrega finanzas; etc.
+  ensureClubTracking(p);         // registra OVR del año y el club inicial
+  return p;
+}
+
+/* ---------- piezas de render reutilizables ---------- */
+function renderCareerHeader(p){
+  const c=clubById(p.contract.clubId);
+  return `<div class="career-header">
+    <div class="ch-left"><span class="ch-name">${p.surname}</span><span class="ovr-badge">${p.ovr}</span></div>
+    <div class="ch-meta">
+      <div class="ch-item"><span class="ch-k">${t('age')}</span><span class="ch-v">${p.age}</span></div>
+      <div class="ch-item"><span class="ch-k">${t('year')}</span><span class="ch-v">${p.year}</span></div>
+    </div>
+    <div class="ch-club">${makeCrest(c.tag,c.c1,c.c2)}<span>${c.name}</span></div>
+  </div>`;
+}
+function renderPsychBars(psych){
+  return `<div class="psych-wrap">`+DATA.PSYCH.map(tr=>{
+    const v=psych[tr.id], cls=v<40?'low':v<65?'mid':'high';
+    return `<div class="psych-row"><div class="psych-label"><span>${psychLabel(tr.id)}</span><span class="psych-val">${v}</span></div>
+      <div class="psych-track"><div class="psych-fill ${cls}" style="width:${v}%"></div></div></div>`;
+  }).join('')+`</div>`;
+}
+function renderTags(ids){
+  return ids.map(id=>{ const T=DATA.TAGS[id]; if(!T) return '';
+    return `<span class="ntag ${T.type}">${T.type==='good'?'✓':'✗'} ${tagLabel(id)}</span>`; }).join('');
+}
+function statCard(label,value,kind){
+  return `<div class="stat-card ${kind}"><span class="sc-label">${label}</span><span class="sc-value">${value}</span></div>`;
+}
+
+/* ---------- PANTALLA: FICHA DEL JUGADOR (la Parte 3 la amplía con radar) ---------- */
+RENDERERS.player=function(){
+  const p=App.state.player; if(!p){ App.go('identity'); return; }
+  const club=clubById(p.origin.clubId), origin=originById(p.origin.contextId);
+  $('#screen-player').innerHTML=`
+    ${renderCareerHeader(p)}
+    <div class="player-grid">
+      <div class="origin-card">
+        <div class="origin-crest">${makeCrest(club.tag,club.c1,club.c2)}</div>
+        <div class="origin-info"><span class="eyebrow">${t('your_origin')}</span>
+          <h3>${club.name}</h3><p class="mu">${leagueName(club.league)} · ${t('youth_academy')}</p></div>
+      </div>
+      <div class="context-card"><span class="eyebrow">${t('context')}</span>
+        <h3>${origin.title[App.state.lang]}</h3><p class="mu">${origin.text[App.state.lang]}</p>
+        <div class="ntag-row">${renderTags(origin.tags)}</div></div>
+    </div>
+    <div class="player-grid">
+      <div class="panel-card"><h4>${t('psychology')}</h4>${renderPsychBars(p.psych)}</div>
+      <div class="panel-card"><h4>${t('personality')}</h4>
+        <div class="trait-list">${p.traits.map(id=>`<div class="trait-chip"><b>${traitLabel(id)}</b><span>${traitDesc(id)}</span></div>`).join('')}</div></div>
+    </div>
+    <div class="stat-cards">
+      ${statCard(t('ovr'),p.ovr,'ovr')}
+      ${statCard(t('potential'),p.potential,'pot')}
+      ${statCard(t('market_value'),fmtMoney(p.value),'val')}
+      ${statCard(t('position'),p.position,'pos')}
+    </div>
+    <div class="player-actions">
+      <button class="btn btn-g" id="btn-edit-id">← ${t('edit_identity')}</button>
+      <button class="btn btn-g" id="btn-reroll">🎲 ${t('reroll_destiny')}</button>
+      <button class="btn btn-a btn-lg" id="btn-begin">${t('begin_story')} →</button>
+    </div>`;
+  $('#btn-edit-id').onclick=()=>App.go('identity');
+  $('#btn-reroll').onclick =()=>{ createPlayer(App.state.identity); RENDERERS.player(); App.toast('🎲 '+t('destiny_changed')); };
+  $('#btn-begin').onclick  =()=>App.go('career');
+};
+
+/* ---------- PANTALLA: CARRERA intro (la Parte 4 la reemplaza con el motor) ---------- */
+RENDERERS.career=function(){
+  const p=App.state.player; if(!p){ App.go('identity'); return; }
+  const club=clubById(p.contract.clubId);
+  $('#screen-career').innerHTML=`
+    ${renderCareerHeader(p)}
+    <div class="season-intro">
+      <div class="season-num">1</div>
+      <div><span class="eyebrow">${t('season')} 1 · ${p.year}</span>
+        <h2>${t('first_season_title')}</h2>
+        <p class="mu">${fill(t('first_season_text'),p)}</p></div>
+    </div>
+    <div class="ph-card" style="margin:30px auto">
+      <div class="ph-badge">⚽ ${t('events_engine')}</div>
+      <h2>${t('life_events')}</h2>
+      <p class="mu">${t('life_events_text')}<span class="ph-part">${t('ph_part')} 4</span>.</p>
+    </div>`;
+};
+
+/* ---------- gancho: el botón "Confirmar identidad" de la Parte 1 ---------- */
+Bus.on('identityConfirmed', I=>{ createPlayer(I); App.go('player'); });
+
+/* ---------- CSS de esta parte (reusa .career-header/.psych-*/.ntag de la 1) ---------- */
+injectCSS('css-part2',`
+.player-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:22px;margin-bottom:22px}
+.origin-card{display:flex;align-items:center;gap:18px;background:var(--panel);border:1px solid var(--bd);border-radius:var(--rl);padding:24px}
+.origin-crest svg{width:74px;height:85px}
+.origin-info h3{font-family:var(--D);font-size:22px;font-weight:800;margin:6px 0 4px}
+.context-card{background:var(--panel);border:1px solid var(--bd);border-radius:var(--rl);padding:24px}
+.context-card h3{font-family:var(--D);font-size:20px;font-weight:800;margin:8px 0}
+.context-card p{line-height:1.6;margin-bottom:14px}
+.panel-card{background:var(--panel);border:1px solid var(--bd);border-radius:var(--rl);padding:24px}
+.panel-card h4{font-size:15px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin-bottom:18px}
+.trait-list{display:flex;flex-direction:column;gap:12px}
+.trait-chip{background:var(--panel2);border:1px solid var(--bd);border-radius:var(--rm);padding:12px 14px}
+.trait-chip b{display:block;font-size:14px;margin-bottom:3px;color:var(--ind2)}
+.trait-chip span{font-size:13px;color:var(--mu)}
+.stat-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:6px 0 26px}
+.stat-card{background:var(--panel);border:1px solid var(--bd);border-radius:var(--rl);padding:20px;text-align:center}
+.sc-label{display:block;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--mu2);margin-bottom:8px}
+.sc-value{font-family:var(--D);font-size:30px;font-weight:800;letter-spacing:-.02em}
+.stat-card.ovr .sc-value{color:#f472b6}
+.stat-card.pot .sc-value{color:var(--ind2)}
+.stat-card.val .sc-value{color:var(--ok)}
+.player-actions{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;padding-bottom:60px}
+.season-intro{display:flex;align-items:center;gap:24px;background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(224,72,155,.08));
+  border:1px solid var(--bd);border-radius:var(--rl);padding:28px}
+.season-num{font-family:var(--D);font-size:70px;font-weight:800;color:var(--ind);line-height:1;opacity:.9}
+.season-intro h2{font-family:var(--D);font-size:26px;font-weight:800;margin:6px 0}
+.season-intro p{line-height:1.6;max-width:640px}
+@media(max-width:820px){.player-grid{grid-template-columns:1fr}.stat-cards{grid-template-columns:1fr 1fr}}
+`);
+
+/* >>>> PEGAR PARTE 3 AQUÍ (mismo <script>, sin cerrar). La 3 reasigna RENDERERS.player con radar + salario + ánimo. <<<< */
+   
