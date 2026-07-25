@@ -1,1 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de Carrera Futbolística</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN SYSTEM  (todo el CSS base va acá, no en JS)
+   ============================================================ */
+:root{
+  --bg:#0a0a0b;--bg2:#0d0d10;--panel:#161618;--panel2:#1b1b1f;--panel3:#222227;
+  --bd:#2a2a30;--bd2:#34343c;--tx:#f4f4f6;--mu:#9a9aa6;--mu2:#6c6c78;
+  --ac:#e0489b;--ac2:#c026d3;--ind:#6366f1;--ind2:#818cf8;
+  --ok:#4ade80;--no:#f87171;--go:#f59e0b;--go2:#fbbf24;
+  --fd:#0f5132;--fd2:#14532d;--fl:rgba(255,255,255,.22);
+  --r:8px;--rm:14px;--rl:20px;--rx:26px;--rp:999px;
+  --sh:0 18px 50px -20px rgba(0,0,0,.8);
+  --gO:linear-gradient(150deg,#f472b6,#d946ef 55%,#a21caf);
+  --gA:linear-gradient(135deg,#e0489b,#c026d3);
+  --F:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --D:'Bricolage Grotesque',Inter,sans-serif;
+  --M:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--F);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background-image:radial-gradient(1200px 600px at 80% -10%,rgba(192,38,211,.10),transparent 60%),
+                   radial-gradient(900px 500px at 0% 110%,rgba(99,102,241,.08),transparent 60%)}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input{font-family:inherit}
+.mono{font-family:var(--M);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.mu{color:var(--mu)}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.22em;color:var(--mu);text-transform:uppercase}
+.wrap{max-width:1280px;margin:0 auto;padding:0 28px}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#2c2c34;border-radius:8px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:#3a3a44}
 
+/* ---------- HEADER PROPIO (sin chrome de portal) ---------- */
+.gh{position:sticky;top:0;z-index:50;background:rgba(10,10,11,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd)}
+.gh .row{display:flex;align-items:center;height:62px;gap:16px}
+.gh-brand{display:flex;align-items:center;gap:11px;cursor:pointer}
+.gh-brand svg{width:26px;height:26px;color:var(--go2);filter:drop-shadow(0 4px 10px rgba(245,158,11,.35))}
+.gh-brand .wm{font-family:var(--D);font-weight:800;font-size:22px;letter-spacing:-.01em;line-height:1}
+.gh-brand .wm em{font-style:normal;background:var(--gA);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gh-brand .sub{font-size:10px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--mu2);align-self:flex-end;margin-bottom:2px}
+.lang{margin-left:auto;display:inline-flex;background:var(--panel);border:1px solid var(--bd);border-radius:var(--rp);padding:4px;gap:2px}
+.lang button{display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:var(--rp);font-weight:700;font-size:13px;color:var(--mu);transition:.2s}
+.lang button .fl{width:17px;height:12px;border-radius:2px;object-fit:cover;background:#222}
+.lang button .fe{font-size:14px;line-height:1}
+.lang button.on{background:#fff;color:#0a0a0b}
+
+/* ---------- BOTONES ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;border-radius:var(--rp);
+  transition:transform .15s,box-shadow .2s,background .2s,border-color .2s,filter .2s;white-space:nowrap}
+.btn:active{transform:translateY(1px)}
+.btn-w{background:#fff;color:#0a0a0b;padding:11px 22px;font-size:14px}
+.btn-w:hover{box-shadow:0 8px 24px -8px rgba(255,255,255,.5)}
+.btn-g{background:transparent;color:var(--tx);border:1px solid var(--bd2);padding:11px 22px;font-size:14px}
+.btn-g:hover{border-color:var(--mu);background:rgba(255,255,255,.04)}
+.btn-a{background:var(--gA);color:#fff;padding:12px 26px;font-size:15px;box-shadow:0 10px 30px -10px rgba(224,72,155,.7)}
+.btn-a:hover{filter:brightness(1.08)}
+.btn-lg{padding:15px 34px;font-size:16px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* ---------- PANTALLAS ---------- */
+.scr{display:none;animation:fadeUp .5s cubic-bezier(.2,.7,.2,1) both}
+.scr.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes shimmer{0%,55%{left:-60%}100%{left:130%}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* ---------- LANDING / HERO ---------- */
+.hero{display:grid;grid-template-columns:1fr 1.05fr;gap:64px;align-items:center;padding:64px 0 84px}
+.hero-art{position:relative;aspect-ratio:1/.78;border-radius:var(--rl);overflow:hidden;
+  background:linear-gradient(150deg,#3a0d2e,#7a155f 45%,#c026d3 120%);box-shadow:var(--sh);border:1px solid rgba(255,255,255,.08)}
+.hero-art::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 7px);mix-blend-mode:overlay}
+.hero-art .sil{position:absolute;bottom:0;background:rgba(255,255,255,.14);border-radius:40px 40px 10px 10px}
+.hero-art .sil::before{content:"";position:absolute;left:50%;top:-26px;transform:translateX(-50%);width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.16)}
+.hero-art .s1{left:8%;width:74px;height:150px;opacity:.5}
+.hero-art .s2{left:38%;width:96px;height:200px;background:rgba(255,255,255,.22)}
+.hero-art .s2::before{width:54px;height:54px;top:-32px;background:rgba(255,255,255,.24)}
+.hero-art .s3{right:8%;width:80px;height:170px;opacity:.55}
+.hero-art .num{position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);font-family:var(--D);font-size:120px;font-weight:800;color:rgba(255,255,255,.16);letter-spacing:-.05em}
+.hero-art .cup{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);width:64px;color:#fff;opacity:.92;animation:floaty 4s ease-in-out infinite}
+.hero-copy h1{font-family:var(--D);font-size:clamp(40px,5.4vw,66px);line-height:1.02;font-weight:800;letter-spacing:-.03em;margin:14px 0 18px}
+.hero-copy h1 em{font-style:normal;background:var(--gA);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-copy p{color:var(--mu);font-size:18px;line-height:1.6;max-width:520px;margin-bottom:26px}
+.hero-stats{display:flex;flex-wrap:wrap;gap:10px 22px;margin-bottom:30px;font-family:var(--M);font-size:13px;color:var(--mu)}
+.hero-stats b{color:var(--tx);font-weight:700}
+.hero-stats i{color:var(--ac);font-style:normal;margin:0 4px}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap}
+
+/* ---------- IDENTIDAD ---------- */
+.page-title{font-family:var(--D);font-size:30px;font-weight:800;letter-spacing:-.02em;padding:34px 0 6px}
+.id-grid{display:grid;grid-template-columns:300px 1fr 360px;gap:30px;padding:18px 0 50px;align-items:start}
+.id-col h3{text-align:center;font-size:18px;font-weight:800;margin-bottom:18px}
+.jersey-wrap{display:flex;flex-direction:column;align-items:center;gap:22px}
+.jersey{position:relative;width:170px;height:180px;color:#111;background:linear-gradient(180deg,#fff,#e9e9ee);
+  clip-path:polygon(28% 0,72% 0,100% 18%,86% 30%,86% 100%,14% 100%,14% 30%,0 18%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 20px 40px -20px rgba(0,0,0,.7)}
+.jersey .jn{font-size:13px;font-weight:800;letter-spacing:.08em;color:#222;margin-bottom:2px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jersey .jnum{font-family:var(--D);font-size:54px;font-weight:800;line-height:1;color:#111}
+.field-row{display:grid;grid-template-columns:1fr 90px;gap:12px;width:100%}
+.field-input{display:flex;flex-direction:column;gap:6px}
+.field-input label{font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--mu2);text-align:center}
+.inp{background:var(--panel2);border:1px solid var(--bd);border-radius:var(--r);padding:12px 14px;color:var(--tx);font-size:15px;font-weight:600;width:100%;transition:.2s;text-align:center}
+.inp::placeholder{color:var(--mu2);font-weight:600}
+.inp:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px rgba(224,72,155,.18)}
+.seg{display:flex;background:var(--panel2);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.seg button{flex:1;padding:11px 6px;font-weight:700;font-size:13px;color:var(--mu);transition:.2s}
+.seg button.on{background:#fff;color:#0a0a0b}
+.id-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:14px}
+
+.search-box{position:relative;margin-bottom:14px}
+.search-box svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;color:var(--mu2)}
+.search-box input{background:var(--panel2);border:1px solid var(--bd);border-radius:var(--r);padding:13px 14px 13px 40px;width:100%;color:var(--tx);font-size:14px}
+.search-box input:focus{outline:none;border-color:var(--ind)}
+.country-list{max-height:330px;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;padding-right:6px}
+.country{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:var(--r);transition:.15s;cursor:pointer}
+.country:hover{background:var(--panel2)}
+.country.sel{background:rgba(99,102,241,.16);box-shadow:inset 0 0 0 1px var(--ind)}
+.country .fl{width:26px;height:18px;border-radius:3px;object-fit:cover;background:#222;flex:none}
+.country .fe{font-size:18px;line-height:1}
+.country span{font-size:14px;font-weight:600}
+
+.pitch{position:relative;aspect-ratio:3/4.1;border-radius:var(--rm);overflow:hidden;
+  background:repeating-linear-gradient(0deg,var(--fd) 0 26px,var(--fd2) 26px 52px);border:2px solid var(--fl)}
+.pitch::before{content:"";position:absolute;inset:8px;border:2px solid var(--fl);border-radius:6px}
+.pitch .mid{position:absolute;left:8px;right:8px;top:50%;height:2px;background:var(--fl)}
+.pitch .circle{position:absolute;left:50%;top:50%;width:74px;height:74px;transform:translate(-50%,-50%);border:2px solid var(--fl);border-radius:50%}
+.pitch .box-t,.pitch .box-b{position:absolute;left:50%;transform:translateX(-50%);border:2px solid var(--fl);width:46%;height:14%}
+.pitch .box-t{top:8px;border-top:none}.pitch .box-b{bottom:8px;border-bottom:none}
+.pos{position:absolute;transform:translate(-50%,-50%);background:rgba(8,30,18,.85);border:1px solid rgba(255,255,255,.28);color:#eafff2;
+  font-size:11px;font-weight:800;letter-spacing:.03em;padding:7px 9px;border-radius:var(--rp);transition:.15s;backdrop-filter:blur(2px)}
+.pos:hover{background:rgba(99,102,241,.55);border-color:#fff;transform:translate(-50%,-50%) scale(1.08)}
+.pos.sel{background:var(--gA);border-color:#fff;box-shadow:0 0 0 4px rgba(224,72,155,.3);animation:pop .3s}
+
+/* ---------- COMPONENTES COMUNES (los usan varias pantallas) ---------- */
+.career-header{display:flex;align-items:center;gap:22px;background:var(--panel);border:1px solid var(--bd);
+  border-radius:var(--rm);padding:14px 22px;margin:24px 0;box-shadow:var(--sh)}
+.ch-left{display:flex;align-items:center;gap:12px}
+.ch-name{font-family:var(--D);font-size:22px;font-weight:800;letter-spacing:-.02em}
+.ovr-badge{background:var(--gO);color:#fff;font-family:var(--D);font-weight:800;font-size:18px;min-width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;border-radius:10px;box-shadow:0 6px 18px -6px rgba(217,70,239,.7);position:relative;overflow:hidden}
+.ovr-badge::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-18deg);animation:shimmer 3.4s ease-in-out infinite}
+.ch-meta{display:flex;gap:26px;margin-left:8px}
+.ch-item{display:flex;flex-direction:column;line-height:1.1}
+.ch-k{font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--mu2);text-transform:uppercase}
+.ch-v{font-family:var(--D);font-size:20px;font-weight:800;color:var(--ind2)}
+.ch-club{margin-left:auto;display:flex;align-items:center;gap:10px;font-weight:700}
+.ch-club svg{width:34px;height:39px}
+
+.psych-wrap{display:flex;flex-direction:column}
+.psych-row{margin-bottom:14px}
+.psych-label{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px}
+.psych-val{color:var(--mu)}
+.psych-track{height:9px;background:var(--panel3);border-radius:var(--rp);overflow:hidden}
+.psych-fill{height:100%;border-radius:var(--rp);transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.psych-fill.low{background:linear-gradient(90deg,#ef4444,#f87171)}
+.psych-fill.mid{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.psych-fill.high{background:linear-gradient(90deg,#22c55e,#4ade80)}
+
+.ntag{font-size:12px;font-weight:700;padding:5px 11px;border-radius:var(--rp)}
+.ntag.good{background:rgba(74,222,128,.14);color:var(--ok)}
+.ntag.bad{background:rgba(248,113,113,.14);color:var(--no)}
+.ntag-row{display:flex;flex-wrap:wrap;gap:8px}
+
+/* ---------- PLACEHOLDER PROLIJO (módulos de partes futuras) ---------- */
+.ph{min-height:62vh;display:flex;align-items:center;justify-content:center;padding:60px 0}
+.ph-card{background:var(--panel);border:1px solid var(--bd);border-radius:var(--rl);padding:48px 56px;text-align:center;max-width:560px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.ph-card::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.02) 0 2px,transparent 2px 9px);pointer-events:none}
+.ph-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,.15);color:var(--ind2);font-weight:800;font-size:12px;letter-spacing:.12em;padding:7px 14px;border-radius:var(--rp);margin-bottom:18px}
+.ph-card h2{font-family:var(--D);font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:10px}
+.ph-card p{color:var(--mu);line-height:1.6}
+.ph-card .ph-part{color:var(--ind2);font-weight:800}
+
+/* ---------- TOAST ---------- */
+#toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:var(--panel3);border:1px solid var(--bd2);
+  color:var(--tx);padding:13px 22px;border-radius:var(--rp);font-weight:700;font-size:14px;box-shadow:var(--sh);opacity:0;pointer-events:none;transition:.3s;z-index:200}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ac);margin-right:9px;vertical-align:middle}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr;gap:34px;padding:40px 0 60px}
+  .id-grid{grid-template-columns:1fr;gap:34px}
+  .gh-brand .sub{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER PROPIO DEL JUEGO (marca + idioma, nada de portal) -->
+<header class="gh">
+  <div class="wrap row">
+    <div class="gh-brand" onclick="App.go('landing')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 0 12 0V3H6z"/><path d="M6 5H3v2a3 3 0 0 0 3 3M18 5h3v2a3 3 0 0 1-3 3M9 21h6M12 15v6"/></svg>
+      <span class="wm"><em>carrera</em></span>
+      <span class="sub" data-i18n="brand_sub">simulador</span>
+    </div>
+    <div class="lang" role="group" aria-label="Idioma">
+      <button data-lang="es" class="on"><span class="fe">🇦</span> ES</button>
+      <button data-lang="en"><span class="fe">🇬🇧</span> EN</button>
+      <button data-lang="pt"><span class="fe">🇧</span> PT</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="screen-landing"  class="scr"></section>
+  <section id="screen-identity" class="scr"></section>
+  <section id="screen-player"   class="scr"></section>
+  <section id="screen-career"   class="scr"></section>
+  <section id="screen-match"    class="scr"></section>
+  <section id="screen-offer"    class="scr"></section>
+  <section id="screen-press"    class="scr"></section>
+  <section id="screen-finance"  class="scr"></section>
+  <section id="screen-final"    class="scr"></section>
+</main>
+
+<div id="toast"><span class="dot"></span><span id="toast-msg"></span></div>
+
+<!-- ============================================================
+     EL <script> QUEDA ABIERTO. NO LO CIERRES.
+     Las PARTES 2..9 se pegan DENTRO, antes del marcador final.
+     La PARTE 10 trae el </script></body></html>.
+     ============================================================ -->
+<script>
+"use strict";
+
+/* =========================================================
+   BUS DE EVENTOS  (acoplamiento entre módulos, sin wrappers)
+   try/catch: un bug en un módulo NO rompe a los demás.
+   ========================================================= */
+window.Bus = {
+  _h:{},
+  on(e,fn){ (this._h[e]=this._h[e]||[]).push(fn); return fn; },
+  off(e,fn){ if(this._h[e]) this._h[e]=this._h[e].filter(f=>f!==fn); },
+  emit(e,...a){ (this._h[e]||[]).slice().forEach(fn=>{ try{ fn(...a); }catch(err){ console.warn('[Bus]['+e+']',err); } }); }
+};
+
+/* =========================================================
+   UTILIDADES GLOBALES
+   ========================================================= */
+const $  = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const clamp  = (v,a,b)=>Math.max(a,Math.min(b,v));
+const rand   = (a,b)=>Math.random()*(b-a)+a;
+const randInt= (a,b)=>Math.floor(rand(a,b+1));
+const pick   = arr=>arr[Math.floor(Math.random()*arr.length)];
+const chance = p=>Math.random()<p;
+const fmtMoney = m => m>=1e6 ? '€'+(m/1e6).toFixed(1)+'M' : m>=1e3 ? '€'+Math.round(m/1e3)+'K' : '€'+Math.round(m);
+
+// ISO-2 -> emoji bandera (fallback offline)
+function codeToFlag(code){ return code.toUpperCase().replace(/./g,c=>String.fromCodePoint(127397+c.charCodeAt(0))); }
+window.fixFlag = function(img,code){ const s=document.createElement('span'); s.className=(img.className||'fl')+' fe'; s.textContent=codeToFlag(code); img.replaceWith(s); };
+function flagImg(code,cls='fl'){ const c=code.toLowerCase(); return `<img class="${cls}" src="https://flagcdn.com/w40/${c}.png" alt="${code}" loading="lazy" onerror="fixFlag(this,'${code}')">`; }
+
+// Escudo SVG con colores reales del club (UID único, sin colisiones)
+let _crestUID=0;
+function makeCrest(tag,c1,c2){
+  const uid='c'+(_crestUID++);
+  return `<svg viewBox="0 0 80 92" width="46" height="53" aria-hidden="true">
+    <defs><clipPath id="sh${uid}"><path d="M4 4 H76 V46 Q76 76 40 90 Q4 76 4 46 Z"/></clipPath></defs>
+    <g clip-path="url(#sh${uid})"><rect width="40" height="92" fill="${c1}"/><rect x="40" width="40" height="92" fill="${c2}"/></g>
+    <path d="M4 4 H76 V46 Q76 76 40 90 Q4 76 4 46 Z" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="3"/>
+    <text x="40" y="52" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="22" fill="#fff" style="paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:2px">${tag}</text>
+  </svg>`;
+}
+
+// Inyectar CSS por módulo (id único, no duplica). Lo usan las partes 2..10.
+function injectCSS(id,css){ if(document.getElementById(id))return; const s=document.createElement('style'); s.id=id; s.textContent=css; document.head.appendChild(s); }
+
+/* =========================================================
+   i18n  (cadenas de shell + landing + identidad + comunes)
+   ========================================================= */
+const I18N = {
+  es:{ brand_sub:'simulador',
+       hero_title:'Construí tu <em>carrera</em> futbolística',
+       hero_text:'Elegí tu origen, tomá decisiones clave y dejá que el destino te lleve a una trayectoria única de títulos, estadísticas y momentos decisivos.',
+       start:'Comenzar carrera',
+       hero_s1:'decisiones', hero_s2:'clubes reales', hero_s3:'ligas', hero_s4:'partidos en vivo',
+       id_title:'Definí tu identidad', col_id:'Identidad', col_nat:'Nacionalidad', col_pos:'Posición',
+       surname:'Apellido', number:'Número', foot:'Pierna hábil', left:'Izquierda', right:'Derecha',
+       search_country:'Buscar país', back:'Volver', confirm:'Confirmar identidad',
+       need_surname:'Escribí un apellido.', need_nat:'Elegí tu nacionalidad.', need_pos:'Elegí tu posición en el campo.',
+       ph_player:'Ficha del jugador', ph_player_p:'Creación del jugador, OVR, atributos y rasgos.',
+       ph_career:'Motor de carrera + eventos', ph_career_p:'Decisiones narrativas y avance del tiempo.',
+       ph_match:'Simulador de partidos', ph_match_p:'90 minutos en vivo, rating y estadísticas.',
+       ph_offer:'Mercado de pases', ph_offer_p:'Ofertas y negociación con el director deportivo.',
+       ph_press:'Sala de prensa', ph_press_p:'Periodistas con voz y termómetro mediático.',
+       ph_finance:'La bóveda', ph_finance_p:'Patrimonio, sponsors, impuestos y extracto.',
+       ph_final:'Final de carrera', ph_final_p:'Vitrina, leyenda y guardado.',
+       ph_builds:'Se construye en la', ph_part:'Parte',
+       age:'Edad', year:'Año', ovr:'OVR', potential:'Potencial', market_value:'Valor',
+       psychology:'Psicología', personality:'Personalidad', attributes:'Atributos',
+       confidence:'Confianza', motivation:'Motivación', resilience:'Resiliencia', happiness:'Felicidad', form:'Forma' },
+  en:{ brand_sub:'simulator',
+       hero_title:'Build your football <em>career</em>',
+       hero_text:'Choose your origin, make key decisions and let destiny take you on a unique path of titles, stats and defining moments.',
+       start:'Start career',
+       hero_s1:'decisions', hero_s2:'real clubs', hero_s3:'leagues', hero_s4:'live matches',
+       id_title:'Define your identity', col_id:'Identity', col_nat:'Nationality', col_pos:'Position',
+       surname:'Surname', number:'Number', foot:'Preferred foot', left:'Left', right:'Right',
+       search_country:'Search country', back:'Back', confirm:'Confirm identity',
+       need_surname:'Enter a surname.', need_nat:'Choose your nationality.', need_pos:'Choose your position on the pitch.',
+       ph_player:'Player card', ph_player_p:'Player creation, OVR, attributes and traits.',
+       ph_career:'Career engine + events', ph_career_p:'Narrative decisions and time progression.',
+       ph_match:'Match simulator', ph_match_p:'90 live minutes, rating and stats.',
+       ph_offer:'Transfer market', ph_offer_p:'Offers and negotiation with the sporting director.',
+       ph_press:'Press room', ph_press_p:'Journalists with a voice and a media thermometer.',
+       ph_finance:'The vault', ph_finance_p:'Wealth, sponsors, taxes and statement.',
+       ph_final:'Career end', ph_final_p:'Showcase, legend and save.',
+       ph_builds:'Built in', ph_part:'Part',
+       age:'Age', year:'Year', ovr:'OVR', potential:'Potential', market_value:'Value',
+       psychology:'Psychology', personality:'Personality', attributes:'Attributes',
+       confidence:'Confidence', motivation:'Motivation', resilience:'Resilience', happiness:'Happiness', form:'Form' },
+  pt:{ brand_sub:'simulador',
+       hero_title:'Construa sua <em>carreira</em> no futebol',
+       hero_text:'Escolha sua origem, tome decisões-chave e deixe o destino levá-lo a uma trajetória única de títulos, estatísticas e momentos decisivos.',
+       start:'Iniciar carreira',
+       hero_s1:'decisões', hero_s2:'clubes reais', hero_s3:'ligas', hero_s4:'partidas ao vivo',
+       id_title:'Defina sua identidade', col_id:'Identidade', col_nat:'Nacionalidade', col_pos:'Posição',
+       surname:'Sobrenome', number:'Número', foot:'Pé hábil', left:'Esquerdo', right:'Direito',
+       search_country:'Buscar país', back:'Voltar', confirm:'Confirmar identidade',
+       need_surname:'Digite um sobrenome.', need_nat:'Escolha sua nacionalidade.', need_pos:'Escolha sua posição em campo.',
+       ph_player:'Ficha do jogador', ph_player_p:'Criação do jogador, OVR, atributos e traços.',
+       ph_career:'Motor de carreira + eventos', ph_career_p:'Decisões narrativas e avanço do tempo.',
+       ph_match:'Simulador de partidas', ph_match_p:'90 minutos ao vivo, nota e estatísticas.',
+       ph_offer:'Mercado de transferências', ph_offer_p:'Propostas e negociação com o diretor esportivo.',
+       ph_press:'Sala de imprensa', ph_press_p:'Jornalistas com voz e termômetro midiático.',
+       ph_finance:'O cofre', ph_finance_p:'Patrimônio, patrocínios, impostos e extrato.',
+       ph_final:'Fim de carreira', ph_final_p:'Vitrine, lenda e salvar.',
+       ph_builds:'Construído na', ph_part:'Parte',
+       age:'Idade', year:'Ano', ovr:'OVR', potential:'Potencial', market_value:'Valor',
+       psychology:'Psicologia', personality:'Personalidade', attributes:'Atributos',
+       confidence:'Confiança', motivation:'Motivação', resilience:'Resiliência', happiness:'Felicidade', form:'Forma' }
+};
+const t = k => (I18N[App.state.lang]||I18N.es)[k] ?? I18N.es[k] ?? k;
+
+/* =========================================================
+   DATA MAESTRA
+   ========================================================= */
+const DATA = {
+  COUNTRIES: [
+    ['AF','Afganistán'],['AL','Albania'],['DE','Alemania'],['AD','Andorra'],['AO','Angola'],['AI','Anguila'],
+    ['SA','Arabia Saudita'],['DZ','Argelia'],['AR','Argentina'],['AM','Armenia'],['AU','Australia'],['AT','Austria'],
+    ['AZ','Azerbaiyán'],['BS','Bahamas'],['BD','Bangladés'],['BE','Bélgica'],['BJ','Benín'],['BY','Bielorrusia'],
+    ['BO','Bolivia'],['BA','Bosnia y Herzegovina'],['BW','Botsuana'],['BR','Brasil'],['BG','Bulgaria'],['BF','Burkina Faso'],
+    ['BI','Burundi'],['KH','Camboya'],['CM','Camerún'],['CA','Canadá'],['CV','Cabo Verde'],['TD','Chad'],['CL','Chile'],
+    ['CN','China'],['CY','Chipre'],['CO','Colombia'],['KR','Corea del Sur'],['CR','Costa Rica'],['CI','Costa de Marfil'],
+    ['HR','Croacia'],['CU','Cuba'],['DK','Dinamarca'],['EC','Ecuador'],['EG','Egipto'],['SV','El Salvador'],
+    ['AE','Emiratos Árabes'],['SK','Eslovaquia'],['SI','Eslovenia'],['ES','España'],['US','Estados Unidos'],['EE','Estonia'],
+    ['ET','Etiopía'],['FI','Finlandia'],['FR','Francia'],['GA','Gabón'],['GH','Ghana'],['GR','Grecia'],['GT','Guatemala'],
+    ['HN','Honduras'],['HU','Hungría'],['IN','India'],['ID','Indonesia'],['IR','Irán'],['IQ','Irak'],['IE','Irlanda'],
+    ['IS','Islandia'],['IL','Israel'],['IT','Italia'],['JM','Jamaica'],['JP','Japón'],['JO','Jordania'],['KZ','Kazajistán'],
+    ['KE','Kenia'],['LV','Letonia'],['LT','Lituania'],['LU','Luxemburgo'],['MA','Marruecos'],['MX','México'],['NG','Nigeria'],
+    ['NO','Noruega'],['NZ','Nueva Zelanda'],['PA','Panamá'],['PY','Paraguay'],['PE','Perú'],['PL','Polonia'],['PT','Portugal'],
+    ['QA','Catar'],['GB','Reino Unido'],['CZ','República Checa'],['RO','Rumania'],['RU','Rusia'],['SN','Senegal'],
+    ['RS','Serbia'],['ZA','Sudáfrica'],['SE','Suecia'],['CH','Suiza'],['TH','Tailandia'],['TN','Túnez'],['TR','Turquía'],
+    ['UA','Ucrania'],['UY','Uruguay'],['VE','Venezuela']
+  ].map(([code,name])=>({code,name})),
+
+  POSITIONS: [
+    {id:'POR',label:'POR',x:50,y:91,zone:'GK'},
+    {id:'DFC',label:'DFC',x:50,y:78,zone:'DEF'},
+    {id:'LI', label:'LI', x:22,y:70,zone:'DEF'},
+    {id:'LD', label:'LD', x:78,y:70,zone:'DEF'},
+    {id:'MCD',label:'MCD',x:50,y:60,zone:'MED'},
+    {id:'MI', label:'MI', x:20,y:50,zone:'MED'},
+    {id:'MC', label:'MC', x:50,y:49,zone:'MED'},
+    {id:'MD', label:'MD', x:80,y:50,zone:'MED'},
+    {id:'MCO',label:'MCO',x:50,y:36,zone:'MED'},
+    {id:'EI', label:'EI', x:22,y:24,zone:'ATT'},
+    {id:'ED', label:'ED', x:78,y:24,zone:'ATT'},
+    {id:'DC', label:'DC', x:50,y:14,zone:'ATT'}
+  ],
+
+  LEAGUES: [
+    {id:'ARG',name:'Liga Profesional',country:'AR'},
+    {id:'BRA',name:'Brasileirão Série A',country:'BR'},
+    {id:'ESP',name:'La Liga',country:'ES'},
+    {id:'ENG',name:'Premier League',country:'GB'},
+    {id:'ITA',name:'Serie A',country:'IT'},
+    {id:'GER',name:'Bundesliga',country:'DE'},
+    {id:'FRA',name:'Ligue 1',country:'FR'}
+  ],
+  CLUBS: [
+    {id:'river',name:'River Plate',tag:'RIV',league:'ARG',tier:1,ovr:78,prest:92,c1:'#e30613',c2:'#ffffff'},
+    {id:'boca',name:'Boca Juniors',tag:'BOC',league:'ARG',tier:1,ovr:77,prest:93,c1:'#002b5c',c2:'#f9b400'},
+    {id:'racing',name:'Racing Club',tag:'RAC',league:'ARG',tier:1,ovr:76,prest:84,c1:'#6cb4e4',c2:'#ffffff'},
+    {id:'indep',name:'Independiente',tag:'IND',league:'ARG',tier:1,ovr:74,prest:82,c1:'#c8102e',c2:'#ffffff'},
+    {id:'casla',name:'San Lorenzo',tag:'CAS',league:'ARG',tier:1,ovr:73,prest:80,c1:'#0d2c54',c2:'#a50034'},
+    {id:'edlp',name:'Estudiantes (LP)',tag:'EDL',league:'ARG',tier:1,ovr:74,prest:78,c1:'#c8102e',c2:'#ffffff'},
+    {id:'gimn',name:'Gimnasia (LP)',tag:'GIM',league:'ARG',tier:1,ovr:70,prest:66,c1:'#0b3d91',c2:'#ffffff'},
+    {id:'lanus',name:'Lanús',tag:'LAN',league:'ARG',tier:1,ovr:73,prest:70,c1:'#7a1f2b',c2:'#1c1c1c'},
+    {id:'velez',name:'Vélez Sarsfield',tag:'VEL',league:'ARG',tier:1,ovr:74,prest:76,c1:'#003da5',c2:'#ffffff'},
+    {id:'aaaj',name:'Argentinos Jrs.',tag:'AAJ',league:'ARG',tier:1,ovr:72,prest:68,c1:'#d81e2c',c2:'#ffffff'},
+    {id:'hurac',name:'Huracán',tag:'HUR',league:'ARG',tier:1,ovr:71,prest:64,c1:'#ffffff',c2:'#d81e2c'},
+    {id:'rcen',name:'Rosario Central',tag:'RC',league:'ARG',tier:1,ovr:72,prest:72,c1:'#003da5',c2:'#f9b400'},
+    {id:'tall',name:'Talleres (C)',tag:'TAL',league:'ARG',tier:1,ovr:73,prest:70,c1:'#1c3a8f',c2:'#ffffff'},
+    {id:'dyj',name:'Defensa y Justicia',tag:'DYJ',league:'ARG',tier:1,ovr:72,prest:60,c1:'#9bce3f',c2:'#f7d117'},
+    {id:'tempe',name:'Temperley',tag:'TEM',league:'ARG',tier:2,ovr:64,prest:42,c1:'#6cb4e4',c2:'#ffffff'},
+    {id:'coleg',name:'Colegiales',tag:'COL',league:'ARG',tier:3,ovr:58,prest:24,c1:'#c8102e',c2:'#f9b400'},
+    {id:'fla',name:'Flamengo',tag:'FLA',league:'BRA',tier:1,ovr:80,prest:95,c1:'#d81e2c',c2:'#111111'},
+    {id:'pal',name:'Palmeiras',tag:'PAL',league:'BRA',tier:1,ovr:80,prest:92,c1:'#006437',c2:'#ffffff'},
+    {id:'sao',name:'São Paulo',tag:'SPF',league:'BRA',tier:1,ovr:78,prest:90,c1:'#d81e2c',c2:'#111111'},
+    {id:'cor',name:'Corinthians',tag:'COR',league:'BRA',tier:1,ovr:77,prest:89,c1:'#111111',c2:'#ffffff'},
+    {id:'san',name:'Santos',tag:'SAN',league:'BRA',tier:1,ovr:74,prest:84,c1:'#ffffff',c2:'#111111'},
+    {id:'flu',name:'Fluminense',tag:'FLU',league:'BRA',tier:1,ovr:77,prest:83,c1:'#7a1f2b',c2:'#006437'},
+    {id:'bot',name:'Botafogo',tag:'BOT',league:'BRA',tier:1,ovr:78,prest:82,c1:'#111111',c2:'#ffffff'},
+    {id:'gre',name:'Grêmio',tag:'GRE',league:'BRA',tier:1,ovr:76,prest:84,c1:'#0d6fb8',c2:'#111111'},
+    {id:'int',name:'Internacional',tag:'INT',league:'BRA',tier:1,ovr:76,prest:83,c1:'#d81e2c',c2:'#ffffff'},
+    {id:'atm',name:'Atlético Mineiro',tag:'CAM',league:'BRA',tier:1,ovr:77,prest:82,c1:'#111111',c2:'#ffffff'},
+    {id:'cru',name:'Cruzeiro',tag:'CRU',league:'BRA',tier:1,ovr:75,prest:80,c1:'#003da5',c2:'#ffffff'},
+    {id:'remo',name:'Remo',tag:'REM',league:'BRA',tier:2,ovr:63,prest:40,c1:'#1c3a8f',c2:'#ffffff'},
+    {id:'rma',name:'Real Madrid',tag:'RMA',league:'ESP',tier:1,ovr:88,prest:99,c1:'#ffffff',c2:'#febe10'},
+    {id:'bar',name:'Barcelona',tag:'BAR',league:'ESP',tier:1,ovr:87,prest:98,c1:'#a50044',c2:'#004d98'},
+    {id:'atm2',name:'Atlético Madrid',tag:'ATM',league:'ESP',tier:1,ovr:83,prest:88,c1:'#cb3524',c2:'#ffffff'},
+    {id:'sev',name:'Sevilla',tag:'SEV',league:'ESP',tier:1,ovr:78,prest:80,c1:'#d81e2c',c2:'#ffffff'},
+    {id:'rso',name:'Real Sociedad',tag:'RSO',league:'ESP',tier:1,ovr:79,prest:76,c1:'#003da5',c2:'#ffffff'},
+    {id:'ath',name:'Athletic Club',tag:'ATH',league:'ESP',tier:1,ovr:79,prest:78,c1:'#d81e2c',c2:'#ffffff'},
+    {id:'vil',name:'Villarreal',tag:'VIL',league:'ESP',tier:1,ovr:79,prest:74,c1:'#ffe114',c2:'#003da5'},
+    {id:'val',name:'Valencia',tag:'VAL',league:'ESP',tier:1,ovr:76,prest:76,c1:'#ffffff',c2:'#111111'},
+    {id:'bet',name:'Real Betis',tag:'BET',league:'ESP',tier:1,ovr:77,prest:74,c1:'#00954c',c2:'#ffffff'},
+    {id:'gir',name:'Girona',tag:'GIR',league:'ESP',tier:1,ovr:78,prest:62,c1:'#cd2534',c2:'#ffffff'},
+    {id:'mci',name:'Manchester City',tag:'MCI',league:'ENG',tier:1,ovr:88,prest:95,c1:'#6cabdd',c2:'#1c2c5b'},
+    {id:'ars',name:'Arsenal',tag:'ARS',league:'ENG',tier:1,ovr:86,prest:93,c1:'#ef0107',c2:'#ffffff'},
+    {id:'liv',name:'Liverpool',tag:'LIV',league:'ENG',tier:1,ovr:86,prest:94,c1:'#c8102e',c2:'#ffffff'},
+    {id:'mun',name:'Manchester Utd',tag:'MUN',league:'ENG',tier:1,ovr:82,prest:95,c1:'#da291c',c2:'#ffe500'},
+    {id:'che',name:'Chelsea',tag:'CHE',league:'ENG',tier:1,ovr:82,prest:90,c1:'#034694',c2:'#ffffff'},
+    {id:'tot',name:'Tottenham',tag:'TOT',league:'ENG',tier:1,ovr:81,prest:84,c1:'#ffffff',c2:'#132257'},
+    {id:'new',name:'Newcastle',tag:'NEW',league:'ENG',tier:1,ovr:81,prest:80,c1:'#111111',c2:'#ffffff'},
+    {id:'avl',name:'Aston Villa',tag:'AVL',league:'ENG',tier:1,ovr:80,prest:78,c1:'#670e36',c2:'#95bfe5'},
+    {id:'bri',name:'Brighton',tag:'BHA',league:'ENG',tier:1,ovr:78,prest:66,c1:'#0057b8',c2:'#ffffff'},
+    {id:'whu',name:'West Ham',tag:'WHU',league:'ENG',tier:1,ovr:77,prest:72,c1:'#7a263a',c2:'#1bb1e7'},
+    {id:'int2',name:'Inter',tag:'INT',league:'ITA',tier:1,ovr:86,prest:93,c1:'#0068a8',c2:'#111111'},
+    {id:'mil',name:'Milan',tag:'MIL',league:'ITA',tier:1,ovr:83,prest:93,c1:'#fb090b',c2:'#111111'},
+    {id:'juv',name:'Juventus',tag:'JUV',league:'ITA',tier:1,ovr:82,prest:94,c1:'#111111',c2:'#ffffff'},
+    {id:'nap',name:'Napoli',tag:'NAP',league:'ITA',tier:1,ovr:83,prest:85,c1:'#12a0d7',c2:'#ffffff'},
+    {id:'rom',name:'Roma',tag:'ROM',league:'ITA',tier:1,ovr:80,prest:84,c1:'#8e1f2f',c2:'#f0bc42'},
+    {id:'laz',name:'Lazio',tag:'LAZ',league:'ITA',tier:1,ovr:79,prest:78,c1:'#87d8f7',c2:'#ffffff'},
+    {id:'ata',name:'Atalanta',tag:'ATA',league:'ITA',tier:1,ovr:81,prest:74,c1:'#1c1c1c',c2:'#1e63b8'},
+    {id:'fio',name:'Fiorentina',tag:'FIO',league:'ITA',tier:1,ovr:78,prest:76,c1:'#5f2e91',c2:'#ffffff'},
+    {id:'bay',name:'Bayern Munich',tag:'BAY',league:'GER',tier:1,ovr:87,prest:96,c1:'#dc052d',c2:'#ffffff'},
+    {id:'bvb',name:'Borussia Dortmund',tag:'BVB',league:'GER',tier:1,ovr:83,prest:90,c1:'#fde100',c2:'#111111'},
+    {id:'rbl',name:'RB Leipzig',tag:'RBL',league:'GER',tier:1,ovr:82,prest:74,c1:'#dd0741',c2:'#ffffff'},
+    {id:'b04',name:'Bayer Leverkusen',tag:'B04',league:'GER',tier:1,ovr:84,prest:78,c1:'#e32221',c2:'#111111'},
+    {id:'sge',name:'Eintracht Frankfurt',tag:'SGE',league:'GER',tier:1,ovr:79,prest:74,c1:'#111111',c2:'#e1000f'},
+    {id:'wob',name:'Wolfsburg',tag:'WOB',league:'GER',tier:1,ovr:76,prest:64,c1:'#65b32e',c2:'#ffffff'},
+    {id:'stu',name:'Stuttgart',tag:'VFB',league:'GER',tier:1,ovr:79,prest:70,c1:'#e32219',c2:'#ffffff'},
+    {id:'bmg',name:'Mönchengladbach',tag:'BMG',league:'GER',tier:1,ovr:76,prest:70,c1:'#111111',c2:'#ffffff'},
+    {id:'psg',name:'Paris SG',tag:'PSG',league:'FRA',tier:1,ovr:86,prest:92,c1:'#004170',c2:'#da291c'},
+    {id:'om',name:'Marseille',tag:'OM',league:'FRA',tier:1,ovr:79,prest:84,c1:'#13b5ea',c2:'#ffffff'},
+    {id:'ol',name:'Lyon',tag:'OL',league:'FRA',tier:1,ovr:78,prest:82,c1:'#0e2348',c2:'#da291c'},
+    {id:'mon',name:'Monaco',tag:'ASM',league:'FRA',tier:1,ovr:78,prest:76,c1:'#da291c',c2:'#ffffff'},
+    {id:'lil',name:'Lille',tag:'LOS',league:'FRA',tier:1,ovr:77,prest:72,c1:'#da291c',c2:'#0e2348'},
+    {id:'nic',name:'Nice',tag:'OGC',league:'FRA',tier:1,ovr:76,prest:66,c1:'#da291c',c2:'#111111'},
+    {id:'ren',name:'Rennes',tag:'REN',league:'FRA',tier:1,ovr:76,prest:66,c1:'#da291c',c2:'#111111'},
+    {id:'len',name:'Lens',tag:'RCL',league:'FRA',tier:1,ovr:77,prest:68,c1:'#da291c',c2:'#f9b400'}
+  ],
+
+  PSYCH: [
+    {id:'confidence'},{id:'motivation'},{id:'resilience'},{id:'happiness'},{id:'form'}
+  ],
+
+  TAGS: {
+    diversion:{type:'good'}, progreso_rapido:{type:'good'}, progreso_lento:{type:'bad'}, presion:{type:'bad'},
+    disciplina:{type:'good'}, dinero:{type:'good'}, fama:{type:'good'}, familia:{type:'good'}, libertad:{type:'good'},
+    riesgo_lesion:{type:'bad'}, roce:{type:'good'}, estres:{type:'bad'}
+  },
+  TAG_I18N:{
+    es:{diversion:'Diversión',progreso_rapido:'Progreso rápido',progreso_lento:'Progreso lento',presion:'Presión',disciplina:'Disciplina',dinero:'Dinero',fama:'Fama',familia:'Familia',libertad:'Libertad',riesgo_lesion:'Riesgo de lesión',roce:'Roce competitivo',estres:'Estrés'},
+    en:{diversion:'Fun',progreso_rapido:'Fast progress',progreso_lento:'Slow progress',presion:'Pressure',disciplina:'Discipline',dinero:'Money',fama:'Fame',familia:'Family',libertad:'Freedom',riesgo_lesion:'Injury risk',roce:'Competitive edge',estres:'Stress'},
+    pt:{diversion:'Diversão',progreso_rapido:'Progresso rápido',progreso_lento:'Progresso lento',presion:'Pressão',disciplina:'Disciplina',dinero:'Dinheiro',fama:'Fama',familia:'Família',libertad:'Liberdade',riesgo_lesion:'Risco de lesão',roce:'Roce competitivo',estres:'Estresse'}
+  },
+
+  PERSONALITY_TRAITS: {
+    goleador:{label:{es:'Goleador',en:'Goalscorer',pt:'Artilheiro'},desc:{es:'Instinto frente al arco.',en:'Instinct in front of goal.',pt:'Instinto diante do gol.'}},
+    muro:{label:{es:'Muro',en:'Wall',pt:'Muralha'},desc:{es:'Sólido en defensa.',en:'Solid in defence.',pt:'Sólido na defesa.'}},
+    cerrojo:{label:{es:'Cerrojo',en:'Lock',pt:'Cadeado'},desc:{es:'Seguro bajo los tres palos.',en:'Safe between the posts.',pt:'Seguro sob as traves.'}},
+    creativo:{label:{es:'Creativo',en:'Playmaker',pt:'Criativo'},desc:{es:'Genera juego y asistencias.',en:'Creates chances and assists.',pt:'Cria jogadas e assistências.'}},
+    ambicioso:{label:{es:'Ambicioso',en:'Ambitious',pt:'Ambicioso'},desc:{es:'Busca progresar rápido.',en:'Seeks fast progress.',pt:'Busca progresso rápido.'}},
+    familiar:{label:{es:'Familiar',en:'Family-oriented',pt:'Família'},desc:{es:'La familia es su motor.',en:'Family is his engine.',pt:'A família é seu motor.'}},
+    fiestero:{label:{es:'Fiestero',en:'Party-lover',pt:'Festeiro'},desc:{es:'Disfruta la noche; riesgo de disciplina.',en:'Loves the nightlife; discipline risk.',pt:'Curte a noite; risco de disciplina.'}},
+    disciplinado:{label:{es:'Disciplinado',en:'Disciplined',pt:'Disciplinado'},desc:{es:'Progreso constante y profesional.',en:'Steady, professional progress.',pt:'Progresso constante e profissional.'}},
+    lider:{label:{es:'Líder',en:'Leader',pt:'Líder'},desc:{es:'Levanta al equipo.',en:'Lifts the team.',pt:'Levanta o time.'}},
+    timido:{label:{es:'Tímido',en:'Shy',pt:'Tímido'},desc:{es:'Sufre la presión mediática.',en:'Struggles with media pressure.',pt:'Sofre com a pressão da mídia.'}},
+    rebelde:{label:{es:'Rebelde',en:'Rebel',pt:'Rebelde'},desc:{es:'Libre, pero difícil de dirigir.',en:'Free, but hard to manage.',pt:'Livre, mas difícil de comandar.'}},
+    profesional:{label:{es:'Profesional',en:'Professional',pt:'Profissional'},desc:{es:'Cuida su cuerpo y carrera.',en:'Takes care of body and career.',pt:'Cuida do corpo e da carreira.'}}
+  },
+
+  CONFIG: { AGE_START:8, AGE_RETIRE_MAX:41, YEAR_START:2025, OVR_FLOOR:40, OVR_CAP:99, OVR_START_BASE:48, PSYCH_DEFAULT:62, GROWTH_PEAK_AGE:27, DECLINE_START_AGE:32 }
+};
+
+// helpers sobre DATA
+const clubById  = id => DATA.CLUBS.find(c=>c.id===id);
+const clubsOf   = lg => DATA.CLUBS.filter(c=>c.league===lg);
+const countryBy = code => DATA.COUNTRIES.find(c=>c.code===code);
+const leagueName= id => (DATA.LEAGUES.find(l=>l.id===id)||{}).name || id;
+const posZone   = pos => (DATA.POSITIONS.find(p=>p.id===pos)||{}).zone || 'MED';
+const tagLabel  = id => (DATA.TAG_I18N[App.state.lang]||DATA.TAG_I18N.es)[id] || id;
+const psychLabel= id => t(id);
+const traitLabel= id => DATA.PERSONALITY_TRAITS[id] ? DATA.PERSONALITY_TRAITS[id].label[App.state.lang] : id;
+const traitDesc = id => DATA.PERSONALITY_TRAITS[id] ? DATA.PERSONALITY_TRAITS[id].desc[App.state.lang]  : '';
+
+/* =========================================================
+   ESTADO + MUTACIONES DE STATS POR CLUB  (sin wrappers)
+   ========================================================= */
+const STATE = {
+  lang:'es', screen:'landing',
+  identity:{ surname:'', number:10, foot:'right', nationality:null, position:null, search:'' },
+  player:null
+};
+
+function ensureClubTracking(p){
+  if(!p) return;
+  p.stats=p.stats||{pj:0,goals:0,assists:0,cleanSheets:0,motm:0,yellows:0,reds:0,trophies:0};
+  p.clubStats=p.clubStats||{}; p.clubLog=p.clubLog||[]; p.yearOvr=p.yearOvr||{}; p.trophies=p.trophies||[];
+  const cid=p.contract&&p.contract.clubId;
+  if(cid){ p.clubStats[cid]=p.clubStats[cid]||{pj:0,goals:0,assists:0,trophies:0};
+    if(!p.clubLog.length) p.clubLog.push({clubId:cid,fromYear:p.year,toYear:null}); }
+  if(p.year!=null && p.yearOvr[p.year]==null) p.yearOvr[p.year]=p.ovr;
+}
+// única puerta para sumar stats: actualiza global + por club actual
+function addStat(p,key,n){
+  n=n||1; ensureClubTracking(p);
+  p.stats[key]=(p.stats[key]||0)+n;
+  const cid=p.contract&&p.contract.clubId;
+  if(cid && (key in p.clubStats[cid])) p.clubStats[cid][key]=(p.clubStats[cid][key]||0)+n;
+}
+function addTrophy(p,kind){
+  ensureClubTracking(p);
+  p.stats.trophies=(p.stats.trophies||0)+1;
+  const cid=p.contract&&p.contract.clubId;
+  if(cid){ p.clubStats[cid].trophies=(p.clubStats[cid].trophies||0)+1; p.trophies.push({clubId:cid,year:p.year,kind:kind||'cup'}); }
+}
+function adjustPsych(p,d){ for(const k in d) if(p.psych&&p.psych[k]!=null) p.psych[k]=clamp(p.psych[k]+d[k],0,100); }
+
+/* =========================================================
+   APP / NAVEGACIÓN / RENDER
+   ========================================================= */
+const App = {
+  state: STATE,
+  init(){ this.applyLang('es'); this.wire(); this.go('landing'); },
+  applyLang(code){
+    this.state.lang=code;
+    $$('[data-i18n]').forEach(el=>{ el.textContent=t(el.dataset.i18n); });
+    $$('.lang button').forEach(b=>b.classList.toggle('on', b.dataset.lang===code));
+    if(RENDERERS[this.state.screen]) RENDERERS[this.state.screen]();
+    Bus.emit('lang', code);
+  },
+  go(name){
+    this.state.screen=name;
+    $$('.scr').forEach(s=>s.classList.toggle('active', s.id==='screen-'+name));
+    if(RENDERERS[name]) RENDERERS[name]();
+    window.scrollTo({top:0,behavior:'smooth'});
+    Bus.emit('screen', name);
+  },
+  toast(msg){
+    $('#toast-msg').textContent=msg; const el=$('#toast'); el.classList.add('show');
+    clearTimeout(this._tt); this._tt=setTimeout(()=>el.classList.remove('show'),2600);
+  },
+  wire(){
+    document.addEventListener('click', e=>{
+      const lb=e.target.closest('.lang button'); if(lb){ this.applyLang(lb.dataset.lang); }
+    });
+  }
+};
+
+/* =========================================================
+   RENDERERS  (P1: landing + identity + placeholders prolijos)
+   Las partes 2..10 reasignan directamente: RENDERERS.x = fn
+   ========================================================= */
+const RENDERERS = {
+  landing(){
+    $('#screen-landing').innerHTML = `
+      <div class="hero">
+        <div class="hero-art" aria-hidden="true">
+          <div class="sil s1"></div><div class="sil s2"></div><div class="sil s3"></div>
+          <div class="num">10</div>
+          <svg class="cup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 0 12 0V3H6z"/><path d="M6 5H3v2a3 3 0 0 0 3 3M18 5h3v2a3 3 0 0 1-3 3M9 21h6M12 15v6"/></svg>
+        </div>
+        <div class="hero-copy">
+          <span class="eyebrow">minijuego · simulador de carrera</span>
+          <h1>${t('hero_title')}</h1>
+          <p>${t('hero_text')}</p>
+          <div class="hero-stats">
+            <span><b>104</b> ${t('hero_s1')}</span><i>·</i>
+            <span><b>70</b> ${t('hero_s2')}</span><i>·</i>
+            <span><b>7</b> ${t('hero_s3')}</span><i>·</i>
+            <span>${t('hero_s4')}</span>
+          </div>
+          <div class="hero-actions">
+            <button class="btn btn-w btn-lg" id="btn-start">${t('start')}</button>
+          </div>
+        </div>
+      </div>`;
+    $('#btn-start').onclick = ()=>App.go('identity');
+    Bus.emit('landingRendered'); // P10 inyecta "Continuar" si hay partida guardada
+  },
+
+  identity(){
+    const I=App.state.identity;
+    const q=(I.search||'').trim().toLowerCase();
+    const countries=DATA.COUNTRIES.filter(c=> !q || c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q));
+    const countryRows=countries.map(c=>
+      `<div class="country ${I.nationality===c.code?'sel':''}" data-country="${c.code}">${flagImg(c.code)} <span>${c.name}</span></div>`
+    ).join('') || `<div class="mu" style="grid-column:1/-1;padding:14px">—</div>`;
+    const posDots=DATA.POSITIONS.map(p=>
+      `<button class="pos ${I.position===p.id?'sel':''}" data-pos="${p.id}" style="left:${p.x}%;top:${p.y}%" title="${p.id}">${p.label}</button>`
+    ).join('');
+    const surnameShow=(I.surname||'APELLIDO').toUpperCase();
+
+    $('#screen-identity').innerHTML = `
+      <h2 class="page-title">${t('id_title')}</h2>
+      <div class="id-grid">
+        <div class="id-col">
+          <h3>${t('col_id')}</h3>
+          <div class="jersey-wrap">
+            <div class="jersey"><div class="jn">${surnameShow}</div><div class="jnum">${clamp(parseInt(I.number)||10,1,99)}</div></div>
+            <div class="field-row">
+              <div class="field-input"><label>${t('surname')}</label><input class="inp" id="in-surname" maxlength="14" placeholder="APELLIDO" value="${I.surname||''}"></div>
+              <div class="field-input"><label>${t('number')}</label><input class="inp" id="in-number" type="number" min="1" max="99" value="${I.number}"></div>
+            </div>
+            <div class="field-input">
+              <label>${t('foot')}</label>
+              <div class="seg" id="foot-seg">
+                <button data-foot="left" class="${I.foot==='left'?'on':''}">${t('left')}</button>
+                <button data-foot="right" class="${I.foot==='right'?'on':''}">${t('right')}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="id-col">
+          <h3>${t('col_nat')}</h3>
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="in-search" placeholder="${t('search_country')}" value="${I.search||''}">
+          </div>
+          <div class="country-list" id="country-list">${countryRows}</div>
+        </div>
+        <div class="id-col">
+          <h3>${t('col_pos')}</h3>
+          <div class="pitch"><div class="mid"></div><div class="circle"></div><div class="box-t"></div><div class="box-b"></div>${posDots}</div>
+        </div>
+      </div>
+      <div class="id-foot">
+        <button class="btn btn-g" id="btn-id-back">${t('back')}</button>
+        <button class="btn btn-a" id="btn-id-confirm">${t('confirm')}</button>
+      </div>`;
+
+    $('#in-surname').oninput = e=>{ I.surname=e.target.value; $('.jersey .jn').textContent=(I.surname||'APELLIDO').toUpperCase(); };
+    $('#in-number').oninput  = e=>{ I.number=e.target.value; $('.jersey .jnum').textContent=clamp(parseInt(I.number)||10,1,99); };
+    $('#in-search').oninput  = e=>{ const v=e.target.value; I.search=v; RENDERERS.identity(); const s=$('#in-search'); if(s){ s.focus(); s.setSelectionRange(v.length,v.length); } };
+    $('#foot-seg').onclick   = e=>{ const b=e.target.closest('[data-foot]'); if(!b)return; I.foot=b.dataset.foot; $$('#foot-seg button').forEach(x=>x.classList.toggle('on',x===b)); };
+    $('#country-list').onclick=e=>{ const r=e.target.closest('[data-country]'); if(!r)return; I.nationality=r.dataset.country; $$('#country-list .country').forEach(x=>x.classList.toggle('sel',x===r)); };
+    $('.pitch').onclick      = e=>{ const p=e.target.closest('[data-pos]'); if(!p)return; I.position=p.dataset.pos; $$('.pitch .pos').forEach(x=>x.classList.toggle('sel',x===p)); };
+    $('#btn-id-back').onclick= ()=>App.go('landing');
+    $('#btn-id-confirm').onclick= ()=>{
+      if(!I.surname.trim()){ App.toast('⚠ '+t('need_surname')); return; }
+      if(!I.nationality)   { App.toast('⚠ '+t('need_nat'));     return; }
+      if(!I.position)      { App.toast('⚠ '+t('need_pos'));     return; }
+      Bus.emit('identityConfirmed', I); // P2 crea el jugador y va a 'player'
+      if(!App.state.player){ App.go('player'); } // fallback si P2 no cargó
+    };
+  },
+
+  // Placeholders prolijos (las partes 2..10 los pisan con asignación directa)
+  player:  ()=>phScreen('🧬', t('ph_player'),  t('ph_player_p'),  2),
+  career:  ()=>phScreen('⚽', t('ph_career'),  t('ph_career_p'),  4),
+  match:   ()=>phScreen('📺', t('ph_match'),   t('ph_match_p'),   5),
+  offer:   ()=>phScreen('🤝', t('ph_offer'),   t('ph_offer_p'),   6),
+  press:   ()=>phScreen('🎙️', t('ph_press'),   t('ph_press_p'),   7),
+  finance: ()=>phScreen('🏦', t('ph_finance'), t('ph_finance_p'), 8),
+  final:   ()=>phScreen('🏁', t('ph_final'),   t('ph_final_p'),   10)
+};
+
+function phScreen(icon,title,desc,part){
+  const cur=App.state.screen;
+  $('#screen-'+cur).innerHTML = `
+    <div class="ph"><div class="ph-card">
+      <div class="ph-badge">${icon} MÓDULO EN CONSTRUCCIÓN</div>
+      <h2>${title}</h2>
+      <p class="mu">${desc}<br>${t('ph_builds')} <span class="ph-part">${t('ph_part')} ${part}</span>.</p>
+      <div style="margin-top:26px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-g" onclick="App.go('identity')">← ${t('back')}</button>
+      </div>
+    </div></div>`;
+}
+
+/* =========================================================
+   ARRANQUE
+   ========================================================= */
+App.init();
+
+/* >>>> PEGAR PARTE 2 AQUÍ (dentro de este mismo <script>, NO cierres nada). Luego 3..9 igual. La PARTE 10 cierra con </script></body></html> <<<< */
